@@ -113,5 +113,4 @@ Don't hesitate to send me your map configuration!
 
 Original Source Code
 --------------------------------
-You can follow future developement of this project and grab the latest fixes on google code:
 http://code.google.com/p/smhideandseek/
