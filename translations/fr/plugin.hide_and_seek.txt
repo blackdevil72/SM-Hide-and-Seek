@@ -1,0 +1,213 @@
+"Phrases"
+{
+	
+	"Title Select Model"
+	{
+		"fr"			"Choisissez un Model"
+	}
+	
+	"Model Changed"
+	{
+		"fr"			"Vous êtes maintenant déguisé en"
+	}
+
+	"Modelmenu Disabled"
+	{
+		"fr"			"Vous ne pouvez plus changer de Model ce round-ci"
+	}
+
+	"Did not choose model"
+	{
+		"fr"			"Vous n'avez pas choisi de Model, assignation en cours..."
+	}
+	
+	"Print to console"
+	{
+		"fr"			"Veuillez taper ceci dans la console:"
+	}
+	
+	"Only terrorists can select models"
+	{
+		"fr"			"Seuls les terroristes peuvent choisir un Model."
+	}
+	
+	"Only terrorists can use"
+	{
+		"fr"			"Seuls les terroristes peuvent utiliser cette commande."
+	}
+	
+	"CT team is full"
+	{
+		"fr"			"L'équipe anti-terroriste est complète!"
+	}
+
+	"Type again for ego"
+	{
+		"fr"			"Retapez /tp pour retourner en première personne."
+	}
+
+	"Wait for t to hide"
+	{
+		"fr"			"Les terroristes ont {1} secondes pour se cacher."
+	}
+
+	"seconds to hide"
+	{
+		"fr"			"Vous avez {1} secondes pour vous cacher. Trouvez un endroit où vous vous fonderez dans le décor!"
+	}
+
+	"Go search"
+	{
+		"fr"			"Vous pensez que les terroristes ne sont pas bien cachés? Trouvez-les!"
+	}
+
+	"whistled"
+	{
+		"fr"			"siffle!"
+	}
+    
+	"whistles left"
+	{
+		"fr"			"Vous pouvez siffler encore {1} fois."
+	}
+
+	"Whistling not allowed yet"
+	{
+		"fr"			"Siffler n'est pas autorisé pour le moment."
+	}
+
+	"T type /whistle"
+	{
+		"fr"			"Les terroristes peuvent siffler pour donner un indice. Tapez \"/whistle\" dans le chat!"
+	}
+	
+	"whistle limit exceeded"
+	{
+		"fr"			"Vous avez déjà utilisé {1} whistles pendant ce round."
+	}
+
+	"T type /tp"
+	{
+		"fr"			"Tapez \"/tp\" dans le chat pour enclencher la vue 3ème personne."
+	}
+
+	"Type !hide"
+	{
+		"fr"			"Tapez \"!hide\" dans le chat pour ouvrir le menu de séléction des Models."
+	}
+
+	"Spectator Cheater"
+	{
+		"fr"			"a été mis en spectateur à cause de mauvaises Cvars."
+	}
+
+	"Kick bad cvars"
+	{
+		"fr"			"Vous devez changer les Cvars au dessus (console) pour jouer sur ce serveur."
+	}
+
+	"protected cvar"
+	{
+		"fr"			"Cette Cvar est protégée."
+	}
+
+	"got frags"
+	{
+		"fr"			"Tous les terroristes vivants gagnent {1} points. Bien joué!"
+	}
+
+	"Hider Freezed"
+	{
+		"fr"			"Vous êtes maintenant freeze."
+	}
+
+	"Hider Unfreezed"
+	{
+		"fr"			"Vous pouvez de nouveau bouger."
+	}
+
+	"HnS Help"
+	{
+		"fr"			"Hide and Seek: Aide"
+	}
+
+	"Running HnS"
+	{
+		"fr"			"Ce serveur est un Hide and Seek"
+	}
+
+	"Instructions 1"
+	{
+		"fr"			"Les Terroristes choisissent un model, et les CTs les cherchent pour les tuer."
+	}
+
+	"Available Commands"
+	{
+		"fr"			"Commandes de chat disponibles"
+	}
+
+	"Howto CT"
+	{
+		"fr"			"Comment jouer le chercheur?"
+	}
+
+	"Instructions CT 1"
+	{
+		"fr"			"Les chercheurs doivent trouver les joueurs cachés, qui peuvent être n'importe quoi, d'un baril à un pot de plante, et les tuer."
+	}
+
+	"Instructions CT 2"
+	{
+		"fr"			"Soyez prudent avec vos tirs! Vous pouvez perdre {1} HP par coup."
+	}
+
+	"Instructions CT 3"
+	{
+		"fr"			"Vous gagnez {1} HP par joueur caché blessé et {2} HP par joueur caché tué. Gardez toujours un oeil derrière vous!"
+	}
+
+	"Howto T"
+	{
+		"fr"			"Comment jouer celui qui se cache?"
+	}
+
+	"Instructions T 1"
+	{
+		"fr"			"Les joueurs cachés choisissent un model qui est commun sur la map actuelle et vont chercher un endroit où ils se fondent le mieux dans le décor."
+	}
+
+	"Instructions T 2"
+	{
+		"fr"			"Restez en mouvement pour donner aux chercheurs une chance et augmenter l'action!"
+	}
+
+	"cmd hide"
+	{
+		"fr"			"Ouvre le menu de choix de models."
+	}
+
+	"cmd tp"
+	{
+		"fr"			"Enclenche la vue 3ème personne."
+	}
+
+	"cmd whistle"
+	{
+		"fr"			"Joue un son depuis la position du joueur caché pour donner un indice aux chercheurs."
+	}
+
+	"cmd whoami"
+	{
+		"fr"			"Affiche le nom du model en cours dans le chat."
+	}
+
+	"cmd freeze"
+	{
+		"fr"			"Freeze les joueurs cachés sur place."
+	}
+
+	"cmd hidehelp"
+	{
+		"fr"			"Ouvre le menu d'aide."
+	}
+}

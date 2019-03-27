@@ -1,0 +1,247 @@
+﻿"Phrases"
+{
+	
+	"Title Select Model"
+	{
+		"de"			"Wähle ein Model"
+	}
+	
+	"Model Changed"
+	{
+		"de"			"Du bist jetzt ein(e)"
+	}
+
+	"Modelmenu Disabled"
+	{
+		"de"			"Du kannst dein Model in dieser Runde nicht nochmal ändern."
+	}
+
+	"Did not choose model"
+	{
+		"de"			"Du hast kein Model ausgewählt. Automatische Zuweisung..."
+	}
+	
+	"Print to console"
+	{
+		"de"			"Bitte kopiere das in deine Konsole:"
+	}
+	
+	"Only terrorists can select models"
+	{
+		"de"			"Nur Terroristen können Models auswählen."
+	}
+	
+	"Only terrorists can use"
+	{
+		"de"			"Nur Terroristen können diesen Befehl benutzen."
+	}
+	
+	"CT team is full"
+	{
+		"de"			"Das CT Team ist voll!"
+	}
+
+	"Type again for ego"
+	{
+		"de"			"Schreibe /tp nochmal, um wieder zur Egoperspektive zu wechseln."
+	}
+
+	"Wait for t to hide"
+	{
+		"de"			"Gib den Terroristen {1} Sekunden zum verstecken."
+	}
+
+	"seconds to hide"
+	{
+		"de"			"Du hast {1} Sekunden, um dich zu verstecken. Suche einen Platz, der zu deinem Model passt!"
+	}
+
+	"Go search"
+	{
+		"de"			"Du denkst nicht, dass alle Terroristen gut versteckt sind? Dann finde sie mal!"
+	}
+
+	"whistled"
+	{
+		"de"			"pfiff!"
+	}
+    
+	"whistles left"
+	{
+		"de"			"Du darfst noch {1}x pfeifen."
+	}
+
+	"Whistling not allowed yet"
+	{
+		"de"			"Pfeifen ist noch nicht erlaubt."
+	}
+
+	"T type /whistle"
+	{
+		"de"			"Terroristen können pfeifen, um den Suchern einen Tipp zu geben. Schreibe \"/whistle\" im Chat!"
+	}
+	
+	"whistle limit exceeded"
+	{
+		"de"			"Du hast bereits deine {1} Pfiffe dieser Runde benutzt."
+	}
+
+	"T type /tp"
+	{
+		"de"			"Schreibe \"/tp\" im Chat, um die Thirdperson-Perspektive zu wechseln!"
+	}
+
+	"Type !hide"
+	{
+		"de"			"Schreibe \"!hide\" im Chat, um das Modelmenü zu öffnen."
+	}
+
+	"Spectator Cheater"
+	{
+		"de"			"wurde dem Zuschauermodus zugeteilt, da er falsche cVar Werte eingestellt hat."
+	}
+
+	"Kick bad cvars"
+	{
+		"de"			"Du musst die obrigen cVars ändern (Konsole), um Hide and Seek spielen zu können."
+	}
+
+	"protected cvar"
+	{
+		"de"			"Dieser cVar ist geschützt. Lass es wie es ist!"
+	}
+
+	"got frags"
+	{
+		"de"			"Alle überlebenden Verstecker haben {1} Punkte bekommen. Gut gemacht!"
+	}
+
+	"Hider Freezed"
+	{
+		"de"			"Du wurdest eingefroren."
+	}
+
+	"Hider Unfreezed"
+	{
+		"de"			"Du kannst dich nun wieder bewegen."
+	}
+
+
+	"HnS Help"
+	{
+		"de"			"Hide and Seek: Hilfe"
+	}
+
+	"Running HnS"
+	{
+		"de"			"Auf diesem Server läuft Hide and Seek."
+	}
+
+	"Instructions 1"
+	{
+		"de"			"Terroristen suchen sich ein Model aus und verstecken sich, CTs suchen und töten sie."
+	}
+
+	"Available Commands"
+	{
+		"de"			"Verfügbare Chatbefehle"
+	}
+
+	"Howto CT"
+	{
+		"de"			"Wie spiele ich als Sucher?"
+	}
+
+	"Instructions CT 1"
+	{
+		"de"			"Sucher müssen die Verstecker finden, wobei diese alles seien können - von einem Ölfass bis zu einer Zimmerpflanze, und töten."
+	}
+
+	"Instructions CT 2"
+	{
+		"de"			"Sei vorsichtig beim Schießen! Du verlierst {1} HP pro Schuss."
+	}
+
+	"Instructions CT 3"
+	{
+		"de"			"Du erhälst {1} HP, wenn du einen Verstecker verletzt, und {2} HP, wenn du ihn tötest. Schau immer wieder mal hinter dich!"
+	}
+
+	"Howto T"
+	{
+		"de"			"Wie spiele ich als Verstecker?"
+	}
+
+	"Instructions T 1"
+	{
+		"de"			"Verstecker wählen ein Model aus, welches oft auf dieser Map vorkommt, und suchen sich einen Platz, wo sie nicht auffallen."
+	}
+
+	"Instructions T 2"
+	{
+		"de"			"Bleib in Bewegung, um den Suchern eine Chance zu geben und die Spannung zu erhöhen!"
+	}
+
+	"cmd hide"
+	{
+		"de"			"Zeigt das Modelauswahl Menü."
+	}
+
+	"cmd tp"
+	{
+		"de"			"Schaltet die Perpektive in die dritte Person und zurück."
+	}
+
+	"cmd whistle"
+	{
+		"de"			"Spielt einen Ton von der Position des Versteckers ab, um den Suchern einen Hinweis zu geben."
+	}
+
+	"cmd whoami"
+	{
+		"de"			"Schreibt den Namen des derzeitigen Models in den Chat."
+	}
+
+	"cmd hidehelp"
+	{
+		"de"			"Zeigt dieses Hilfemenü."
+	}
+
+	"cmd freeze"
+	{
+		"de"			"Friert den Spieler ein."
+	}
+	"going to switch"
+	{
+		"de"			"{1} wird am Ende der Runde in das Versteckerteam verschoben."
+	}
+	"stop switch"
+	{
+		"de"			"{1} wird nicht mehr am Ende der Runde in das Versteckerteam verschoben."
+	}
+	"switched"
+	{
+		"de"			"{1} wurde in das Versteckerteam verschoben."
+	}
+
+	"random"
+	{
+		"de"			"Zufälliges Model"
+	}
+
+	"is heightfixed"
+	{
+		"de"			"Dieses Model ist verbuggt und benutzt den Höhenfixer. Du wirst immer wieder hochspringen."
+	}
+
+	"tax charged"
+	{
+		/* 1: The tax in dollars */
+		"de"			"Für dieses Model wurde eine Gebühr von ${1} eingezogen."
+	}
+
+	"not enough money"
+	{
+		"de"			"Du hast nicht genug Geld, um dieses Model zu benutzen."
+	}
+}
