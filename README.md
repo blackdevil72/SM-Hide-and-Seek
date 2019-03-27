@@ -109,6 +109,7 @@ There are some special keys to set:
         You're able to put taxes on some models to prevent everyone from using it every round. Useful for small models.
         Since Hiders don't get that much money during gameplay, don't set the tax too high. (If you've got some ideas for events to give hiders money for, let me know!)
 
+Don't hesitate to send me your map configuration!
 
 Original Source Code
 --------------------------------
