@@ -11,7 +11,7 @@ Seekers either lose some health (default 5 hp) on every shot or hiders get more 
 Requirements
 --------------------------------
 
-    [SourceMod latest stable](https://www.sourcemod.net/)
+    SourceMod latest stable release (https://www.sourcemod.net/)
 
 Player Commands
 --------------------------------
