@@ -8,7 +8,7 @@
 	
 	"Model Changed"
 	{
-		"fr"			"Vous êtes maintenant déguisé en"
+		"fr"			"Vous Ãªtes maintenant dÃ©guisÃ© en"
 	}
 
 	"Modelmenu Disabled"
@@ -38,12 +38,12 @@
 	
 	"CT team is full"
 	{
-		"fr"			"L'équipe anti-terroriste est complète!"
+		"fr"			"L'Ã©quipe anti-terroriste est complÃ¨te!"
 	}
 
 	"Type again for ego"
 	{
-		"fr"			"Retapez /tp pour retourner en première personne."
+		"fr"			"Tapez /tp pour retourner en premiÃ¨re personne."
 	}
 
 	"Wait for t to hide"
@@ -53,12 +53,12 @@
 
 	"seconds to hide"
 	{
-		"fr"			"Vous avez {1} secondes pour vous cacher. Trouvez un endroit où vous vous fonderez dans le décor!"
+		"fr"			"Vous avez {1} secondes pour vous cacher. Trouvez un endroit oÃ¹ vous vous fonderez dans le dÃ©cor!"
 	}
 
 	"Go search"
 	{
-		"fr"			"Vous pensez que les terroristes ne sont pas bien cachés? Trouvez-les!"
+		"fr"			"Vous pensez que les terroristes ne sont pas bien cachÃ©s? Trouvez-les!"
 	}
 
 	"whistled"
@@ -73,7 +73,7 @@
 
 	"Whistling not allowed yet"
 	{
-		"fr"			"Siffler n'est pas autorisé pour le moment."
+		"fr"			"Siffler n'est pas autorisÃ© pour le moment."
 	}
 
 	"T type /whistle"
@@ -83,22 +83,22 @@
 	
 	"whistle limit exceeded"
 	{
-		"fr"			"Vous avez déjà utilisé {1} whistles pendant ce round."
+		"fr"			"Vous avez dÃ©jÃ  sifflÃ© {1} fois pendant ce round."
 	}
 
 	"T type /tp"
 	{
-		"fr"			"Tapez \"/tp\" dans le chat pour enclencher la vue 3ème personne."
+		"fr"			"Tapez \"/tp\" dans le chat pour enclencher la vue 3Ã¨me personne."
 	}
 
 	"Type !hide"
 	{
-		"fr"			"Tapez \"!hide\" dans le chat pour ouvrir le menu de séléction des Models."
+		"fr"			"Tapez \"!hide\" dans le chat pour ouvrir le menu de sÃ©lÃ©ction des Models."
 	}
 
 	"Spectator Cheater"
 	{
-		"fr"			"a été mis en spectateur à cause de mauvaises Cvars."
+		"fr"			"a Ã©tÃ© mis en spectateur Ã  cause de mauvaises Cvars."
 	}
 
 	"Kick bad cvars"
@@ -108,17 +108,17 @@
 
 	"protected cvar"
 	{
-		"fr"			"Cette Cvar est protégée."
+		"fr"			"Cette Cvar est protÃ©gÃ©e."
 	}
 
 	"got frags"
 	{
-		"fr"			"Tous les terroristes vivants gagnent {1} points. Bien joué!"
+		"fr"			"Tous les terroristes vivants gagnent {1} points. Bien jouÃ©!"
 	}
 
 	"Hider Freezed"
 	{
-		"fr"			"Vous êtes maintenant freeze."
+		"fr"			"Vous Ãªtes maintenant gelÃ©."
 	}
 
 	"Hider Unfreezed"
@@ -153,17 +153,17 @@
 
 	"Instructions CT 1"
 	{
-		"fr"			"Les chercheurs doivent trouver les joueurs cachés, qui peuvent être n'importe quoi, d'un baril à un pot de plante, et les tuer."
+		"fr"			"Les chercheurs doivent trouver les joueurs cachÃ©s, qui peuvent Ãªtre n'importe quoi (d'un baril Ã  un pot de fleur) et les tuer."
 	}
 
 	"Instructions CT 2"
 	{
-		"fr"			"Soyez prudent avec vos tirs! Vous pouvez perdre {1} HP par coup."
+		"fr"			"Soyez prudent avec vos tirs! Vous perdez {1} HP par coup."
 	}
 
 	"Instructions CT 3"
 	{
-		"fr"			"Vous gagnez {1} HP par joueur caché blessé et {2} HP par joueur caché tué. Gardez toujours un oeil derrière vous!"
+		"fr"			"Vous gagnez {1} HP par joueur cachÃ© blessÃ© et {2} HP par joueur cachÃ© tuÃ©. Gardez toujours un oeil derriÃ¨re vous!"
 	}
 
 	"Howto T"
@@ -173,7 +173,7 @@
 
 	"Instructions T 1"
 	{
-		"fr"			"Les joueurs cachés choisissent un model qui est commun sur la map actuelle et vont chercher un endroit où ils se fondent le mieux dans le décor."
+		"fr"			"Les joueurs cachÃ©s choisissent un model qui est commun Ã  la map actuelle et vont chercher un endroit oÃ¹ ils se fondent le mieux dans le dÃ©cor."
 	}
 
 	"Instructions T 2"
@@ -188,12 +188,12 @@
 
 	"cmd tp"
 	{
-		"fr"			"Enclenche la vue 3ème personne."
+		"fr"			"Enclenche la vue 3Ã¨me personne."
 	}
 
 	"cmd whistle"
 	{
-		"fr"			"Joue un son depuis la position du joueur caché pour donner un indice aux chercheurs."
+		"fr"			"Joue un son depuis la position du joueur cachÃ© pour donner un indice aux chercheurs."
 	}
 
 	"cmd whoami"
@@ -203,7 +203,7 @@
 
 	"cmd freeze"
 	{
-		"fr"			"Freeze les joueurs cachés sur place."
+		"fr"			"Freeze les joueurs cachÃ©s sur place."
 	}
 
 	"cmd hidehelp"
