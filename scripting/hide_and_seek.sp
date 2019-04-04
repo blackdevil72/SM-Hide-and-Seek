@@ -6,7 +6,7 @@
 #include <sdkhooks>
 #include <smlib>
 
-#define PLUGIN_VERSION "1.4.1"
+#define PLUGIN_VERSION "1.5.0"
 
 // that's what GetLanguageCount() got me
 #define MAX_LANGUAGES 27
@@ -157,43 +157,43 @@ public Plugin:myinfo =
 
 public OnPluginStart()
 {
-	new Handle:hVersion = CreateConVar("sm_hns_version", PLUGIN_VERSION, "Hide and seek", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	new Handle:hVersion = CreateConVar("sm_hns_version", PLUGIN_VERSION, "Hide and seek", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 	if(hVersion != INVALID_HANDLE)
 		SetConVarString(hVersion, PLUGIN_VERSION);
 	
 	// Config cvars
-	g_hCVEnable = 			CreateConVar("sm_hns_enable", "1", "Enable the Hide and Seek Mod?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_hCVFreezeCTs = 		CreateConVar("sm_hns_freezects", "1", "Should CTs get freezed and blinded on spawn?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_hCVFreezeTime = 		CreateConVar("sm_hns_freezetime", "25.0", "How long should the CTs are freezed after spawn?", FCVAR_PLUGIN, true, 1.00, true, 120.00);
-	g_hCVChangeLimit = 		CreateConVar("sm_hns_changelimit", "2", "How often a T is allowed to choose his model ingame? 0 = unlimited", FCVAR_PLUGIN, true, 0.00);
-	g_hCVChangeLimittime = 	CreateConVar("sm_hns_changelimittime", "30.0", "How long should a T be allowed to change his model again after spawn?", FCVAR_PLUGIN, true, 0.00);
-	g_hCVAutoChoose = 		CreateConVar("sm_hns_autochoose", "0", "Should the plugin choose models for the hiders automatically?", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_hCVWhistle = 			CreateConVar("sm_hns_whistle", "1", "Are terrorists allowed to whistle?", FCVAR_PLUGIN);
-	g_hCVWhistleTimes = 	CreateConVar("sm_hns_whistle_times", "5", "How many times a hider is allowed to whistle per round?", FCVAR_PLUGIN);
-	g_hCVWhistleDelay =		CreateConVar("sm_hns_whistle_delay", "25.0", "How long after spawn should we delay the use of whistle? (Default: 25.0)", FCVAR_PLUGIN, true, 0.00, true, 120.00);
-	g_hCVAntiCheat = 		CreateConVar("sm_hns_anticheat", "0", "Check player cheat convars, 0 = off/1 = on.", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_hCVCheatPunishment = 	CreateConVar("sm_hns_cheat_punishment", "1", "How to punish players with wrong cvar values after 15 seconds? 0: Disabled. 1: Switch to Spectator. 2: Kick", FCVAR_PLUGIN, true, 0.00, true, 2.00);
-	g_hCVHiderWinFrags = 	CreateConVar("sm_hns_hider_win_frags", "5", "How many frags should surviving terrorists gain?", FCVAR_PLUGIN, true, 0.00, true, 10.00);
-	g_hCVSlaySeekers = 		CreateConVar("sm_hns_slay_seekers", "0", "Should we slay all seekers on round end and there are still some hiders alive? (Default: 0)", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_hCVHPSeekerEnable = 	CreateConVar("sm_hns_hp_seeker_enable", "1", "Should CT lose HP when shooting, 0 = off/1 = on.", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_hCVHPSeekerDec = 		CreateConVar("sm_hns_hp_seeker_dec", "5", "How many hp should a CT lose on shooting?", FCVAR_PLUGIN, true, 0.00);
-	g_hCVHPSeekerInc = 		CreateConVar("sm_hns_hp_seeker_inc", "15", "How many hp should a CT gain when hitting a hider?", FCVAR_PLUGIN, true, 0.00);
-	g_hCVHPSeekerBonus = 	CreateConVar("sm_hns_hp_seeker_bonus", "50", "How many hp should a CT gain when killing a hider?", FCVAR_PLUGIN, true, 0.00);
-	g_hCVOpacityEnable = 	CreateConVar("sm_hns_opacity_enable", "0", "Should T get more invisible on low hp, 0 = off/1 = on.", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_hCVHiderSpeed  = 		CreateConVar("sm_hns_hidersspeed", "1.00", "Hiders speed (Default: 1.00).", FCVAR_PLUGIN, true, 1.00, true, 3.00);
-	g_hCVDisableRightKnife =CreateConVar("sm_hns_disable_rightknife", "1", "Disable rightclick for CTs with knife? Prevents knifing without losing heatlh. (Default: 1).", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVDisableDucking =	CreateConVar("sm_hns_disable_ducking", "1", "Disable ducking. (Default: 1).", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVAutoThirdPerson =	CreateConVar("sm_hns_auto_thirdperson", "1", "Enable thirdperson view for hiders automatically. (Default: 1)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVHiderFreezeMode =	CreateConVar("sm_hns_hider_freeze_mode", "2", "0: Disables /freeze command for hiders, 1: Only freeze on position, be able to move camera, 2: Freeze completely (no cameramovements) (Default: 2)", FCVAR_PLUGIN, true, 0.00, true, 2.00);
-	g_hCVHideBlood =		CreateConVar("sm_hns_hide_blood", "1", "Hide blood on hider damage. (Default: 1)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVShowHideHelp =		CreateConVar("sm_hns_show_hidehelp", "1", "Show helpmenu explaining the game on first player spawn. (Default: 1)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVShowProgressBar =	CreateConVar("sm_hns_show_progressbar", "1", "Show progressbar for last 15 seconds of freezetime. (Default: 1)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVCTRatio =			CreateConVar("sm_hns_ct_ratio", "3", "The ratio of hiders to 1 seeker. 0 to disables teambalance. (Default: 3)", FCVAR_PLUGIN, true, 1.00, true, 64.00);
-	g_hCVDisableUse =		CreateConVar("sm_hns_disable_use", "1", "Disable CTs pushing things. (Default: 1)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVHiderFreezeInAir =	CreateConVar("sm_hns_hider_freeze_inair", "0", "Are hiders allowed to freeze in the air? (Default: 0)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVRemoveShadows =	CreateConVar("sm_hns_remove_shadows", "1", "Remove shadows from players and physic models? (Default: 1)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVUseTaxedInRandom =	CreateConVar("sm_hns_use_taxed_in_random", "0", "Include taxed models when using random model choice? (Default: 0)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
-	g_hCVHidePlayerLocation=CreateConVar("sm_hns_hide_player_locations", "1", "Hide the location info shown next to players name on voice chat and teamsay? (Default: 1)", FCVAR_PLUGIN, true, 0.00, true, 1.00);
+	g_hCVEnable = 			CreateConVar("sm_hns_enable", "1", "Enable the Hide and Seek Mod?", 0, true, 0.0, true, 1.0);
+	g_hCVFreezeCTs = 		CreateConVar("sm_hns_freezects", "1", "Should CTs get freezed and blinded on spawn?", 0, true, 0.0, true, 1.0);
+	g_hCVFreezeTime = 		CreateConVar("sm_hns_freezetime", "25.0", "How long should the CTs are freezed after spawn?", 0, true, 1.00, true, 120.00);
+	g_hCVChangeLimit = 		CreateConVar("sm_hns_changelimit", "2", "How often a T is allowed to choose his model ingame? 0 = unlimited", 0, true, 0.00);
+	g_hCVChangeLimittime = 	CreateConVar("sm_hns_changelimittime", "30.0", "How long should a T be allowed to change his model again after spawn?", 0, true, 0.00);
+	g_hCVAutoChoose = 		CreateConVar("sm_hns_autochoose", "0", "Should the plugin choose models for the hiders automatically?", 0, true, 0.0, true, 1.0);
+	g_hCVWhistle = 			CreateConVar("sm_hns_whistle", "1", "Are terrorists allowed to whistle?", 0);
+	g_hCVWhistleTimes = 	CreateConVar("sm_hns_whistle_times", "5", "How many times a hider is allowed to whistle per round?", 0);
+	g_hCVWhistleDelay =		CreateConVar("sm_hns_whistle_delay", "25.0", "How long after spawn should we delay the use of whistle? (Default: 25.0)", 0, true, 0.00, true, 120.00);
+	g_hCVAntiCheat = 		CreateConVar("sm_hns_anticheat", "0", "Check player cheat convars, 0 = off/1 = on.", 0, true, 0.0, true, 1.0);
+	g_hCVCheatPunishment = 	CreateConVar("sm_hns_cheat_punishment", "1", "How to punish players with wrong cvar values after 15 seconds? 0: Disabled. 1: Switch to Spectator. 2: Kick", 0, true, 0.00, true, 2.00);
+	g_hCVHiderWinFrags = 	CreateConVar("sm_hns_hider_win_frags", "5", "How many frags should surviving terrorists gain?", 0, true, 0.00, true, 10.00);
+	g_hCVSlaySeekers = 		CreateConVar("sm_hns_slay_seekers", "0", "Should we slay all seekers on round end and there are still some hiders alive? (Default: 0)", 0, true, 0.0, true, 1.0);
+	g_hCVHPSeekerEnable = 	CreateConVar("sm_hns_hp_seeker_enable", "1", "Should CT lose HP when shooting, 0 = off/1 = on.", 0, true, 0.0, true, 1.0);
+	g_hCVHPSeekerDec = 		CreateConVar("sm_hns_hp_seeker_dec", "5", "How many hp should a CT lose on shooting?", 0, true, 0.00);
+	g_hCVHPSeekerInc = 		CreateConVar("sm_hns_hp_seeker_inc", "15", "How many hp should a CT gain when hitting a hider?", 0, true, 0.00);
+	g_hCVHPSeekerBonus = 	CreateConVar("sm_hns_hp_seeker_bonus", "50", "How many hp should a CT gain when killing a hider?", 0, true, 0.00);
+	g_hCVOpacityEnable = 	CreateConVar("sm_hns_opacity_enable", "0", "Should T get more invisible on low hp, 0 = off/1 = on.", 0, true, 0.0, true, 1.0);
+	g_hCVHiderSpeed  = 		CreateConVar("sm_hns_hidersspeed", "1.00", "Hiders speed (Default: 1.00).", 0, true, 1.00, true, 3.00);
+	g_hCVDisableRightKnife =CreateConVar("sm_hns_disable_rightknife", "1", "Disable rightclick for CTs with knife? Prevents knifing without losing heatlh. (Default: 1).", 0, true, 0.00, true, 1.00);
+	g_hCVDisableDucking =	CreateConVar("sm_hns_disable_ducking", "1", "Disable ducking. (Default: 1).", 0, true, 0.00, true, 1.00);
+	g_hCVAutoThirdPerson =	CreateConVar("sm_hns_auto_thirdperson", "1", "Enable thirdperson view for hiders automatically. (Default: 1)", 0, true, 0.00, true, 1.00);
+	g_hCVHiderFreezeMode =	CreateConVar("sm_hns_hider_freeze_mode", "2", "0: Disables /freeze command for hiders, 1: Only freeze on position, be able to move camera, 2: Freeze completely (no cameramovements) (Default: 2)", 0, true, 0.00, true, 2.00);
+	g_hCVHideBlood =		CreateConVar("sm_hns_hide_blood", "1", "Hide blood on hider damage. (Default: 1)", 0, true, 0.00, true, 1.00);
+	g_hCVShowHideHelp =		CreateConVar("sm_hns_show_hidehelp", "1", "Show helpmenu explaining the game on first player spawn. (Default: 1)", 0, true, 0.00, true, 1.00);
+	g_hCVShowProgressBar =	CreateConVar("sm_hns_show_progressbar", "1", "Show progressbar for last 15 seconds of freezetime. (Default: 1)", 0, true, 0.00, true, 1.00);
+	g_hCVCTRatio =			CreateConVar("sm_hns_ct_ratio", "3", "The ratio of hiders to 1 seeker. 0 to disables teambalance. (Default: 3)", 0, true, 1.00, true, 64.00);
+	g_hCVDisableUse =		CreateConVar("sm_hns_disable_use", "1", "Disable CTs pushing things. (Default: 1)", 0, true, 0.00, true, 1.00);
+	g_hCVHiderFreezeInAir =	CreateConVar("sm_hns_hider_freeze_inair", "0", "Are hiders allowed to freeze in the air? (Default: 0)", 0, true, 0.00, true, 1.00);
+	g_hCVRemoveShadows =	CreateConVar("sm_hns_remove_shadows", "1", "Remove shadows from players and physic models? (Default: 1)", 0, true, 0.00, true, 1.00);
+	g_hCVUseTaxedInRandom =	CreateConVar("sm_hns_use_taxed_in_random", "0", "Include taxed models when using random model choice? (Default: 0)", 0, true, 0.00, true, 1.00);
+	g_hCVHidePlayerLocation=CreateConVar("sm_hns_hide_player_locations", "1", "Hide the location info shown next to players name on voice chat and teamsay? (Default: 1)", 0, true, 0.00, true, 1.00);
 	
 	g_bEnableHnS = GetConVarBool(g_hCVEnable);
 	HookConVarChange(g_hCVEnable, Cfg_OnChangeEnable);
@@ -265,33 +265,33 @@ public OnPluginStart()
 	
 	// get the offsets
 	// for transparency
-	g_Render = FindSendPropOffs("CAI_BaseNPC", "m_clrRender");
+	g_Render = FindSendPropInfo("CAI_BaseNPC", "m_clrRender");
 	if(g_Render == -1)
 		SetFailState("Couldnt find the m_clrRender offset!");	
 	
 	// for hiding players on radar
-	g_flFlashDuration = FindSendPropOffs("CCSPlayer", "m_flFlashDuration");
+	g_flFlashDuration = FindSendPropInfo("CCSPlayer", "m_flFlashDuration");
 	if(g_flFlashDuration == -1)
 		SetFailState("Couldnt find the m_flFlashDuration offset!");
-	g_flFlashMaxAlpha = FindSendPropOffs("CCSPlayer", "m_flFlashMaxAlpha");
+	g_flFlashMaxAlpha = FindSendPropInfo("CCSPlayer", "m_flFlashMaxAlpha");
 	if(g_flFlashMaxAlpha == -1)
 		SetFailState("Couldnt find the m_flFlashMaxAlpha offset!");
-	g_Freeze = FindSendPropOffs("CBasePlayer", "m_fFlags");
+	g_Freeze = FindSendPropInfo("CBasePlayer", "m_fFlags");
 	if(g_Freeze == -1)
 		SetFailState("Couldnt find the m_fFlags offset!");
-	g_iHasNightVision = FindSendPropOffs("CCSPlayer", "m_bHasNightVision");
+	g_iHasNightVision = FindSendPropInfo("CCSPlayer", "m_bHasNightVision");
 	if(g_iHasNightVision == -1)
 		SetFailState("Couldnt find the m_bHasNightVision offset!");
-	g_flLaggedMovementValue = FindSendPropOffs("CCSPlayer", "m_flLaggedMovementValue");
+	g_flLaggedMovementValue = FindSendPropInfo("CCSPlayer", "m_flLaggedMovementValue");
 	if(g_flLaggedMovementValue == -1)
 		SetFailState("Couldnt find the m_flLaggedMovementValue offset!");
-	g_flProgressBarStartTime = FindSendPropOffs("CCSPlayer", "m_flProgressBarStartTime");
+	g_flProgressBarStartTime = FindSendPropInfo("CCSPlayer", "m_flProgressBarStartTime");
 	if(g_flProgressBarStartTime == -1)
 		SetFailState("Couldnt find the m_flProgressBarStartTime offset!");
-	g_iProgressBarDuration = FindSendPropOffs("CCSPlayer", "m_iProgressBarDuration");
+	g_iProgressBarDuration = FindSendPropInfo("CCSPlayer", "m_iProgressBarDuration");
 	if(g_iProgressBarDuration == -1)
 		SetFailState("Couldnt find the m_iProgressBarDuration offset!");
-	g_iAccount = FindSendPropOffs("CCSPlayer", "m_iAccount");
+	g_iAccount = FindSendPropInfo("CCSPlayer", "m_iAccount");
 	if(g_iAccount == -1)
 		SetFailState("Couldnt find the m_iAccount offset!");
 	
