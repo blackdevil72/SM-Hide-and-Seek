@@ -6,7 +6,7 @@
 #include <sdkhooks>
 #include <smlib>
 
-#define PLUGIN_VERSION "1.5.0"
+#define PLUGIN_VERSION "1.5.1"
 
 // that's what GetLanguageCount() got me
 #define MAX_LANGUAGES 27
@@ -149,10 +149,10 @@ new Float:g_fSpawnPosition[MAXPLAYERS+1][3];
 public Plugin:myinfo = 
 {
 	name = "Hide and Seek",
-	author = "Jannik 'Peace-Maker' Hartung and Vladislav Dolgov",
+	author = "Jannik 'Peace-Maker' Hartung and Vladislav Dolgov | blackdevil72",
 	description = "Terrorists set a model and hide, CT seek terrorists.",
 	version = PLUGIN_VERSION,
-	url = "http://www.wcfan.de/ | http://www.elistor.ru/"
+	url = "http://www.wcfan.de/ | http://www.elistor.ru/ | https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek"
 };
 
 public OnPluginStart()
@@ -772,11 +772,6 @@ public Action:Event_OnPlayerSpawn(Handle:event, const String:name[], bool:dontBr
 			{
 				g_hWhistleDelay = CreateTimer(whistle_delay, Timer_AllowWhistle, _, TIMER_FLAG_NO_MAPCHANGE);
 			}
-			else
-			{
-				g_bWhistlingAllowed = true;
-			}
-			g_iFirstTSpawn = GetTime();
 		}
 
 		if(GetConVarBool(g_hCVFreezeCTs))
@@ -1210,6 +1205,8 @@ public Action:FreezePlayer(Handle:timer, any:client)
 public Action:UnFreezePlayer(Handle:timer, any:client)
 {
 	g_hUnfreezeCTTimer[client] = INVALID_HANDLE;
+
+	g_bWhistlingAllowed = true;
 	
 	if(!IsClientInGame(client) || !IsPlayerAlive(client))
 		return Plugin_Stop;
@@ -2920,3 +2917,4 @@ public ClientConVar(QueryCookie:cookie, client, ConVarQueryResult:result, const 
 			g_bConVarViolation[client][i] = false;
 	}
 }
+
