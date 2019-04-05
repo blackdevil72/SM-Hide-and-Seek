@@ -6,7 +6,7 @@
 #include <sdkhooks>
 #include <smlib>
 
-#define PLUGIN_VERSION "1.5.1"
+#define PLUGIN_VERSION "1.5.1.1"
 
 // that's what GetLanguageCount() got me
 #define MAX_LANGUAGES 27
@@ -771,6 +771,10 @@ public Action:Event_OnPlayerSpawn(Handle:event, const String:name[], bool:dontBr
 			if(!g_bWhistlingAllowed && whistle_delay > 0.0)
 			{
 				g_hWhistleDelay = CreateTimer(whistle_delay, Timer_AllowWhistle, _, TIMER_FLAG_NO_MAPCHANGE);
+			}
+			else if(!GetConVarBool(g_hCVFreezeCTs))
+			{
+				g_bWhistlingAllowed = true;
 			}
 		}
 
