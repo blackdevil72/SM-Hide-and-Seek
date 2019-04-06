@@ -11,12 +11,12 @@ Seekers either lose some health (default 5 hp) on every shot or hiders get more 
 Requirements
 --------------------------------
 
-    SourceMod latest stable release (https://www.sourcemod.net/)
+   [SourceMod latest stable release](https://www.sourcemod.net/)
     
 Download Link
 --------------------------------
     
-    [Version 1.5.1.1](https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek/releases/download/1.5.1.1/css_hns_1.5.1.1.zip)
+   [Version 1.5.1.1](https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek/releases/download/1.5.1.1/css_hns_1.5.1.1.zip)
 
 Player Commands
 --------------------------------
@@ -118,4 +118,5 @@ Don't hesitate to send me your map configuration!
 
 Original Source Code
 --------------------------------
-http://code.google.com/p/smhideandseek/
+
+   [http://code.google.com/p/smhideandseek/](http://code.google.com/p/smhideandseek/)
