@@ -1,119 +1,127 @@
+/*
+*
+* Hide and Seek
+* Fench Translation by blackdevil72
+* Version: 2019.04.09
+*
+*/
+
 "Phrases"
 {
 	
 	"Title Select Model"
 	{
-		"fr"			"Choisissez un Model"
+		"fr"			"Selectionez un Modèle"
 	}
 	
 	"Model Changed"
 	{
-		"fr"			"Vous êtes maintenant déguisé en"
+		"fr"			"Vous êtes un(e)"
 	}
 
 	"Modelmenu Disabled"
 	{
-		"fr"			"Vous ne pouvez plus changer de Model ce round-ci"
+		"fr"			"Vous ne pouvez plus changer de Modèle ce round-ci."
 	}
 
 	"Did not choose model"
 	{
-		"fr"			"Vous n'avez pas choisi de Model, assignation en cours..."
+		"fr"			"Vous n'avez pas choisis de Modèle. Choix Automatique..."
 	}
 	
 	"Print to console"
 	{
-		"fr"			"Veuillez taper ceci dans la console:"
+		"fr"			"Écrivez ceci dans la console :"
 	}
 	
 	"Only terrorists can select models"
 	{
-		"fr"			"Seuls les terroristes peuvent choisir un Model."
+		"fr"			"Seuls les Terroristes peuvent choisir un Modèle."
 	}
 	
 	"Only terrorists can use"
 	{
-		"fr"			"Seuls les terroristes peuvent utiliser cette commande."
+		"fr"			"Seuls les Terroristes peuvent utiliser cette commande."
 	}
 	
 	"CT team is full"
 	{
-		"fr"			"L'équipe anti-terroriste est complète!"
+		"fr"			"L'équipe CT est pleine !"
 	}
 
 	"Type again for ego"
 	{
-		"fr"			"Tapez /tp pour retourner en première personne."
+		"fr"			"Tapez à nouveau /tp pour repasser en vu à la 1ère personne."
 	}
 
 	"Wait for t to hide"
 	{
-		"fr"			"Les terroristes ont {1} secondes pour se cacher."
+		"fr"			"Les Terroristes ont {1} secondes pour se cacher."
 	}
 
 	"seconds to hide"
 	{
-		"fr"			"Vous avez {1} secondes pour vous cacher. Trouvez un endroit où vous vous fonderez dans le décor!"
+		"fr"			"Vous avez {1} secondes pour vous cacher. Trouvez la meilleurs cachette pour ne pas être vu !"
 	}
 
 	"Go search"
 	{
-		"fr"			"Vous pensez que les terroristes ne sont pas bien cachés? Trouvez-les!"
+		"fr"			"Vous pensez que les Terroristes sont mal caché ? Allez les trouver !"
 	}
 
 	"whistled"
 	{
-		"fr"			"siffle!"
+		"fr"			"siffle !"
 	}
     
 	"whistles left"
 	{
-		"fr"			"Vous pouvez siffler encore {1} fois."
+		"fr"			"Vous pouvez encore siffler {1} fois."
 	}
 
 	"Whistling not allowed yet"
 	{
-		"fr"			"Siffler n'est pas autorisé pour le moment."
+		"fr"			"Siffler n'est pas autorisé pour le moments."
 	}
 
 	"T type /whistle"
 	{
-		"fr"			"Les terroristes peuvent siffler pour donner un indice. Tapez \"/whistle\" dans le chat!"
+		"fr"			"Les Terroristes peuvent siffler pour aider les CT. Utilisez \"/whistle\" dans le tchat !"
 	}
 	
 	"whistle limit exceeded"
 	{
-		"fr"			"Vous avez déjà sifflé {1} fois pendant ce round."
+		"fr"			"Vous avez déjà sifflé {1} fois durant ce round."
 	}
 
 	"T type /tp"
 	{
-		"fr"			"Tapez \"/tp\" dans le chat pour enclencher la vue 3ème personne."
+		"fr"			"Tapez \"/tp\" dans le tchat pour passer en vu à la 3ème personne !"
 	}
 
 	"Type !hide"
 	{
-		"fr"			"Tapez \"!hide\" dans le chat pour ouvrir le menu de séléction des Models."
+		"fr"			"Tapez \"!hide\" dans le tchat pour ouvrir le menu des Modèles."
 	}
 
 	"Spectator Cheater"
 	{
-		"fr"			"a été mis en spectateur à cause de mauvaises Cvars."
+		"fr"			"a été déplacé en Spectateur (CVARs incorrectes)."
 	}
 
 	"Kick bad cvars"
 	{
-		"fr"			"Vous devez changer les Cvars au dessus (console) pour jouer sur ce serveur."
+		"fr"			"Vous devez changer les CVARs ci-dessus ( dans la console) pour jouer sur ce serveur."
 	}
 
 	"protected cvar"
 	{
-		"fr"			"Cette Cvar est protégée."
+		"fr"			"Cette CVAR est protégée. N'y touchez pas !"
 	}
 
 	"got frags"
 	{
-		"fr"			"Tous les terroristes vivants gagnent {1} points. Bien joué!"
+		"fr"			"Les Terroristes survivant gagnent {1} points. Bien joué !"
 	}
 
 	"Hider Freezed"
@@ -133,81 +141,116 @@
 
 	"Running HnS"
 	{
-		"fr"			"Ce serveur est un Hide and Seek"
+		"fr"			"Ce serveur utilise le mod Hide and Seek."
 	}
 
 	"Instructions 1"
 	{
-		"fr"			"Les Terroristes choisissent un model, et les CTs les cherchent pour les tuer."
+		"fr"			"Terroristes choisisez un Modèle et cachez vous, Counter-Terroristes cherchez-les et tuez-les."
 	}
 
 	"Available Commands"
 	{
-		"fr"			"Commandes de chat disponibles"
+		"fr"			"Commandes disponibles"
 	}
 
 	"Howto CT"
 	{
-		"fr"			"Comment jouer le chercheur?"
+		"fr"			"Comment jouer en Counter-Terroriste ?"
 	}
 
 	"Instructions CT 1"
 	{
-		"fr"			"Les chercheurs doivent trouver les joueurs cachés, qui peuvent être n'importe quoi (d'un baril à un pot de fleur) et les tuer."
+		"fr"			"Les CTs doivent trouvez les Terroristes cachés, ils peuvent être déguisés en n'importe quoi (d'un Baril de pétrole à un simple pot de fleurs)."
 	}
 
 	"Instructions CT 2"
 	{
-		"fr"			"Soyez prudent avec vos tirs! Vous perdez {1} HP par coup."
+		"fr"			"Soyez prudent avec vos tirs ! Vous perdez {1} PV par tirs."
 	}
 
 	"Instructions CT 3"
 	{
-		"fr"			"Vous gagnez {1} HP par joueur caché blessé et {2} HP par joueur caché tué. Gardez toujours un oeil derrière vous!"
+		"fr"			"Vous gagnez {1} PV par Terroristes bléssés and {2} PV par Terroristes tués. Gardez toujours l'oeuil ouvert !"
 	}
 
 	"Howto T"
 	{
-		"fr"			"Comment jouer celui qui se cache?"
+		"fr"			"Comment jouer en Terroriste ?"
 	}
 
 	"Instructions T 1"
 	{
-		"fr"			"Les joueurs cachés choisissent un model qui est commun à la map actuelle et vont chercher un endroit où ils se fondent le mieux dans le décor."
+		"fr"			"Les Terroristes choisissent un Modèle commun à la map, puis doivent trouver la meilleurs cachette pour ne pas être reconnus."
 	}
 
 	"Instructions T 2"
 	{
-		"fr"			"Restez en mouvement pour donner aux chercheurs une chance et augmenter l'action!"
+		"fr"			"Restez en mouvement pour donner aux CTs plus de chance et voir plus d'action !"
 	}
 
 	"cmd hide"
 	{
-		"fr"			"Ouvre le menu de choix de models."
+		"fr"			"Affiche le menu de choix des Modèles."
 	}
 
 	"cmd tp"
 	{
-		"fr"			"Enclenche la vue 3ème personne."
+		"fr"			"Passe en vu à la 3ème personne."
 	}
 
 	"cmd whistle"
 	{
-		"fr"			"Joue un son depuis la position du joueur caché pour donner un indice aux chercheurs."
+		"fr"			"Joue un son depuis la position d'un Terroriste pour donner aux CTs un indice."
 	}
 
 	"cmd whoami"
 	{
-		"fr"			"Affiche le nom du model en cours dans le chat."
+		"fr"			"Affiche le nom du Modèle actuel dans le tchat."
 	}
 
 	"cmd freeze"
 	{
-		"fr"			"Freeze les joueurs cachés sur place."
+		"fr"			"Gèle un Terroriste là ou il est."
 	}
 
 	"cmd hidehelp"
 	{
-		"fr"			"Ouvre le menu d'aide."
+		"fr"			"Affiche le menu d'Aide."
+	}
+
+	"going to switch"
+	{
+		"fr"			"{1} sera déplacé dans l'équipe Terroriste à la fin du round."
+	}
+
+	"stop switch"
+	{
+		"fr"			"{1} ne sera plus déplacé dans l'équipe Terroriste à la fin du round."
+	}
+
+	"switched"
+	{
+		"fr"			"{1} a été déplacé dans l'équipe Terroriste."
+	}
+
+	"random"
+	{
+		"fr"			"Modèle aléartoire"
+	}
+
+	"is heightfixed"
+	{
+		"fr"			"Ce Modèle est buggué et utilise une position fixe. Vous sauterez régulièrement. ({1})"
+	}
+
+	"tax charged"
+	{
+		"fr"			"Une taxe de {1}$ a été payée pour utiliser ce Modèle."
+	}
+
+	"not enough money"
+	{
+		"fr"			"Vous n'avez pas assez d'argent pour utiliser ce Modèle."
 	}
 }
