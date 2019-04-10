@@ -19,6 +19,7 @@
 #define PREFIX "\x04Hide and Seek \x01> \x03"
 
 // plugin cvars
+ConVar g_cvVersion;
 ConVar g_cvEnable;
 ConVar g_cvFreezeCTs;
 ConVar g_cvFreezeTime;
@@ -149,6 +150,7 @@ new g_iWhistleCount[MAXPLAYERS+1] = {0,...};
 new Handle:g_hWhistleDelay = INVALID_HANDLE;
 new bool:g_bWhistlingAllowed = true;
 new String:whistle_sounds_set[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
+new String:whistle_sounds_path[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
 
 // Teambalance
 new g_iLastJoinedCT = -1;
@@ -168,9 +170,7 @@ public Plugin:myinfo =
 
 public OnPluginStart()
 {
-	new Handle:hVersion = CreateConVar("sm_hns_version", PLUGIN_VERSION, "Hide and seek", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
-	if(hVersion != INVALID_HANDLE)
-		SetConVarString(hVersion, PLUGIN_VERSION);
+	g_cvVersion = 			CreateConVar("sm_hns_version", PLUGIN_VERSION, "Hide and seekVersion", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 	
 	// Config cvars
 	g_cvEnable = 			CreateConVar("sm_hns_enable", "1", "Enable the Hide and Seek Mod?", 0, true, 0.0, true, 1.0);
@@ -180,7 +180,7 @@ public OnPluginStart()
 	g_cvChangeLimittime = 		CreateConVar("sm_hns_changelimittime", "30.0", "How long should a T be allowed to change his model again after spawn?", 0, true, 0.00);
 	g_cvAutoChoose = 		CreateConVar("sm_hns_autochoose", "0", "Should the plugin choose models for the hiders automatically?", 0, true, 0.0, true, 1.0);
 	g_cvWhistle = 			CreateConVar("sm_hns_whistle", "1", "Are terrorists allowed to whistle?", 0);
-	g_cvWhistleSet =		CreateConVar("sm_hns_whistle_set", "0", "Wich whistle set to use. 0 = Default / 1 = Whistle / 2 = Birds / 3 = Custom (Default: 0)", 0);
+	g_cvWhistleSet =		CreateConVar("sm_hns_whistle_set", "0", "Wich whistle set to use. 0 = Default / 1 = Whistle / 2 = Birds / 3 = Custom (Default: 0)", 0, true, 0.0, true, 3.0);
 	g_cvWhistleTimes = 		CreateConVar("sm_hns_whistle_times", "5", "How many times a hider is allowed to whistle per round?", 0);
 	g_cvWhistleDelay =		CreateConVar("sm_hns_whistle_delay", "25.0", "How long after spawn should we delay the use of whistle? (Default: 25.0)", 0, true, 0.00, true, 120.00);
 	g_cvAntiCheat = 		CreateConVar("sm_hns_anticheat", "0", "Check player cheat convars, 0 = off/1 = on.", 0, true, 0.0, true, 1.0);
@@ -206,6 +206,8 @@ public OnPluginStart()
 	g_cvRemoveShadows =		CreateConVar("sm_hns_remove_shadows", "1", "Remove shadows from players and physic models? (Default: 1)", 0, true, 0.00, true, 1.00);
 	g_cvUseTaxedInRandom =		CreateConVar("sm_hns_use_taxed_in_random", "0", "Include taxed models when using random model choice? (Default: 0)", 0, true, 0.00, true, 1.00);
 	g_cvHidePlayerLocation=		CreateConVar("sm_hns_hide_player_locations", "1", "Hide the location info shown next to players name on voice chat and teamsay? (Default: 1)", 0, true, 0.00, true, 1.00);
+	
+	SetConVarString(g_cvVersion, PLUGIN_VERSION);
 	
 	g_bEnableHnS = GetConVarBool(g_cvEnable);
 	HookConVarChange(g_cvEnable, Cfg_OnChangeEnable);
@@ -248,6 +250,7 @@ public OnPluginStart()
 	
 	RegAdminCmd("sm_hns_force_whistle", ForceWhistle, ADMFLAG_CHAT, "Force a player to whistle");
 	RegAdminCmd("sm_hns_reload_models", ReloadModels, ADMFLAG_RCON, "Reload the modellist from the map config file.");
+	RegAdminCmd("sm_hns_plugin_verion", PrintHnsVersion, ADMFLAG_CHAT, "Print Hide and Seek plugin version.");
 		
 	// Loading translations
 	LoadTranslations("plugin.hide_and_seek");
@@ -307,8 +310,6 @@ public OnPluginStart()
 	if(g_iAccount == -1)
 		SetFailState("Couldnt find the m_iAccount offset!");
 	
-	//Load Whistle Set form config
-	LoadWhistleSet();
 	
 	AutoExecConfig(true, "plugin.hide_and_seek");
 }
@@ -321,6 +322,9 @@ public OnPluginEnd()
 
 public OnConfigsExecuted()
 {
+	//Load Whistle Set form config
+	LoadWhistleSet();
+
 	if(g_bEnableHnS)
 	{
 		// set bad server cvars
@@ -342,125 +346,6 @@ public OnConfigsExecuted()
 * Generic Events
 * 
 */
-
-public LoadWhistleSet()
-{
-	new CvarWhistleSet = GetConVarInt(g_cvWhistleSet);
-	new String:bufferString[PLATFORM_MAX_PATH];
-	new String:Whistle_Sound[PLATFORM_MAX_PATH];
-	new Handle:SoundSetsKV = CreateKeyValues("SetsList");
-	BuildPath(Path_SM,bufferString, PLATFORM_MAX_PATH, "configs/hide_and_seek/whistle/HnS_SetsList.cfg");
-
-	if (FileToKeyValues(SoundSetsKV, bufferString))
-	{
-		if (CvarWhistleSet == 0)
-		{
-			if (KvJumpToKey(SoundSetsKV, "Default"))
-			{
-				for (new i = 0; i < WHISTLE_SOUNDS_MAX; i++)
-				{
-					IntToString(i, bufferString, PLATFORM_MAX_PATH);
-					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
-					PrecacheSound(whistle_sounds_set[i], true);
-				}
-				PrintToServer("[SM] Hide and Seek : Loading whistle set Default.");
-			}
-		
-			else
-			{
-				CloseHandle(SoundSetsKV);
-				SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
-			}
-		}
-
-		else if (CvarWhistleSet == 1)
-		{
-			if (KvJumpToKey(SoundSetsKV,"Whistle"))
-			{
-				for (new i = 0; i < WHISTLE_SOUNDS_MAX; i++)
-				{
-					IntToString(i, bufferString, PLATFORM_MAX_PATH);
-					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
-					Format(bufferString, sizeof(bufferString), "sound/%s", Whistle_Sound);
-					AddFileToDownloadsTable(Whistle_Sound);
-					PrecacheSound(Whistle_Sound, true);
-				}
-				PrintToServer("[SM] Hide and Seek : Loading whistle set Whistle.");
-			}
-		
-			else
-			{
-				CloseHandle(SoundSetsKV);
-				SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
-			}
-		}
-
-		else if (CvarWhistleSet == 2)
-		{
-			if (KvJumpToKey(SoundSetsKV,"Birds"))
-			{
-				for (new i = 0; i < WHISTLE_SOUNDS_MAX; i++)
-				{
-					IntToString(i, bufferString, PLATFORM_MAX_PATH);
-					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
-					Format(bufferString, sizeof(bufferString), "sound/%s", Whistle_Sound);
-					AddFileToDownloadsTable(Whistle_Sound);
-					PrecacheSound(Whistle_Sound, true);
-				}
-				PrintToServer("[SM] Hide and Seek : Loading whistle set Birds.");
-			}
-			
-			else
-			{
-				CloseHandle(SoundSetsKV);
-				SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
-			}
-		}
-
-		else if (CvarWhistleSet == 3)
-		{
-			if (KvJumpToKey(SoundSetsKV,"Custom"))
-			{
-				for (new i = 0; i < WHISTLE_SOUNDS_MAX; i++)
-				{
-					IntToString(i, bufferString, PLATFORM_MAX_PATH);
-					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
-					Format(bufferString, sizeof(bufferString), "sound/%s", Whistle_Sound);
-					AddFileToDownloadsTable(Whistle_Sound);
-					PrecacheSound(Whistle_Sound, true);
-					
-					if (StrEqual(whistle_sounds_set[i],""))
-					{
-						CloseHandle(SoundSetsKV);
-						SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg Custom set not correctly structured.");
-					}
-				}
-				PrintToServer("[SM] Hide and Seek : Loading whistle set Custom.");
-			}
-		
-			else
-			{
-				CloseHandle(SoundSetsKV);
-				SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
-			}
-		}
-	
-		else
-		{
-			CloseHandle(SoundSetsKV);
-			SetFailState("CVAR sm_hns_whistle_set not correctly setup.");
-		}
-	}
-
-	else
-	{
-		CloseHandle(SoundSetsKV);
-		SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not found.");
-	}
-	
-	CloseHandle(SoundSetsKV);
-}
-
 
 public OnMapStart()
 {
@@ -2006,7 +1891,7 @@ public Action:Play_Whistle(client,args)
 	
 	if(g_iWhistleCount[client] < cvarWhistleTimes)
 	{
-		EmitSoundToAll(whistle_sounds_set[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], client, SNDCHAN_AUTO, SNDLEVEL_GUNFIRE);
+		EmitSoundToAll(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], client, SNDCHAN_AUTO, SNDLEVEL_GUNFIRE);
 		PrintToChatAll("%s%N %t", PREFIX, client, "whistled");
 		g_iWhistleCount[client]++;
 		PrintToChat(client, "%s%t", PREFIX, "whistles left", (cvarWhistleTimes-g_iWhistleCount[client]));
@@ -2185,7 +2070,7 @@ public Action:ForceWhistle(client, args)
 	
 	if(GetClientTeam(target) == CS_TEAM_T && IsPlayerAlive(target))
 	{
-		EmitSoundToAll(whistle_sounds_set[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], target, SNDCHAN_AUTO, SNDLEVEL_GUNFIRE);
+		EmitSoundToAll(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], target, SNDCHAN_AUTO, SNDLEVEL_GUNFIRE);
 		PrintToChatAll("%s%N %t", PREFIX, target, "whistled");
 	}
 	else
@@ -2212,6 +2097,19 @@ public Action:ReloadModels(client, args)
 	
 	ReplyToCommand(client, "Hide and Seek: Reloaded config.");
 	
+	return Plugin_Handled;
+}
+
+public Action:PrintHnsVersion(client, args)
+{
+	if(!g_bEnableHnS)
+	{
+		ReplyToCommand(client, "Disabled");
+		return Plugin_Handled;
+	}
+	
+	PrintToChatAll("[HnS] Hide and Seek version ", g_cvVersion);
+	PrintToServer("[HnS] Hide and Seek version ", g_cvVersion);
 	return Plugin_Handled;
 }
 
@@ -3060,3 +2958,126 @@ public ClientConVar(QueryCookie:cookie, client, ConVarQueryResult:result, const 
 	}
 }
 
+public LoadWhistleSet()
+{
+	new String:bufferString[PLATFORM_MAX_PATH];
+	new Handle:SoundSetsKV = CreateKeyValues("SetsList");
+	BuildPath(Path_SM,bufferString, PLATFORM_MAX_PATH, "configs/hide_and_seek/whistle/HnS_SetsList.cfg");
+
+	if (FileToKeyValues(SoundSetsKV, bufferString))
+	{
+		//Default Engine Sounds
+		if (GetConVarInt(g_cvWhistleSet) == 0)
+		{
+			if (KvJumpToKey(SoundSetsKV, "Default"))
+			{
+				for (new i = 0; i < WHISTLE_SOUNDS_MAX; i++)
+				{
+					IntToString(i, bufferString, PLATFORM_MAX_PATH);
+					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
+					PrecacheSound(whistle_sounds_set[i], true);
+				}
+				PrintToServer("[SM] Hide and Seek : Loading whistle set Default.");
+			}
+		
+			else
+			{
+				CloseHandle(SoundSetsKV);
+				SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
+			}
+		}
+
+		else if (GetConVarInt(g_cvWhistleSet) == 1)
+		{
+			if (KvJumpToKey(SoundSetsKV,"Whistle"))
+			{
+				for (new i = 0; i < WHISTLE_SOUNDS_MAX; i++)
+				{
+					IntToString(i, bufferString, PLATFORM_MAX_PATH);
+					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
+					whistle_sounds_path[i] = whistle_sounds_set[i];
+					PrecacheSound(whistle_sounds_path[i], true);
+					Format(whistle_sounds_set[i], PLATFORM_MAX_PATH, "sound/%s", whistle_sounds_set[i]);
+					AddFileToDownloadsTable(whistle_sounds_set[i]);
+				}
+				PrintToServer("[SM] Hide and Seek : Loading whistle set Whistle.");
+			}
+		
+			else
+			{
+				CloseHandle(SoundSetsKV);
+				SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
+			}
+		}
+
+		else if (GetConVarInt(g_cvWhistleSet) == 2)
+		{
+			if (KvJumpToKey(SoundSetsKV,"Birds"))
+			{
+				for (new i = 0; i < WHISTLE_SOUNDS_MAX; i++)
+				{
+					IntToString(i, bufferString, PLATFORM_MAX_PATH);
+					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
+					whistle_sounds_path[i] = whistle_sounds_set[i];
+					PrecacheSound(whistle_sounds_path[i], true);
+					Format(whistle_sounds_set[i], PLATFORM_MAX_PATH, "sound/%s", whistle_sounds_set[i]);
+					AddFileToDownloadsTable(whistle_sounds_set[i]);
+				}
+				PrintToServer("[SM] Hide and Seek : Loading whistle set Birds.");
+			}
+			
+			else
+			{
+				CloseHandle(SoundSetsKV);
+				SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
+			}
+		}
+
+		else if (GetConVarInt(g_cvWhistleSet) == 3)
+		{
+			if (KvJumpToKey(SoundSetsKV,"Custom"))
+			{
+				for (new i = 0; i < WHISTLE_SOUNDS_MAX; i++)
+				{
+					IntToString(i, bufferString, PLATFORM_MAX_PATH);
+					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
+
+					if (StrEqual(whistle_sounds_set[i],""))
+					{
+						CloseHandle(SoundSetsKV);
+						SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg Custom set not correctly structured.");
+					}
+
+					else
+					{
+						whistle_sounds_path[i] = whistle_sounds_set[i];
+						PrecacheSound(whistle_sounds_path[i], true);
+						Format(whistle_sounds_set[i], PLATFORM_MAX_PATH, "sound/%s", whistle_sounds_set[i]);
+						AddFileToDownloadsTable(whistle_sounds_set[i]);
+					}
+				}
+				PrintToServer("[SM] Hide and Seek : Loading whistle set Custom.");
+			}
+		
+			else
+			{
+				CloseHandle(SoundSetsKV);
+				SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
+			}
+		}
+	
+		else
+		{
+			CloseHandle(SoundSetsKV);
+			SetFailState("CVAR sm_hns_whistle_set not correctly setup.");
+		}
+	}
+
+	else
+	{
+		CloseHandle(SoundSetsKV);
+		SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not found.");
+	}
+	
+	CloseHandle(SoundSetsKV);
+}
