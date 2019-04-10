@@ -2975,7 +2975,8 @@ public LoadWhistleSet()
 				{
 					IntToString(i, bufferString, PLATFORM_MAX_PATH);
 					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
-					PrecacheSound(whistle_sounds_set[i], true);
+					whistle_sounds_path[i] = whistle_sounds_set[i];
+					PrecacheSound(whistle_sounds_path[i], true);
 				}
 				PrintToServer("[SM] Hide and Seek : Loading whistle set Default.");
 			}
