@@ -18,7 +18,7 @@ Download Link
     
    Stable : [Version 1.5.1.1](https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek/releases/download/1.5.1.1/css_hns_1.5.1.1.zip)
    
-   Dev Build : [Version 1.6.0 Dev](https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek/releases/download/1.6.0_dev_1/css_hide_and_seek_1.6.0_dev3.zip)
+   Dev Build : [Version 1.6.0 Dev](https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek/releases/download/1.6.0_dev_1/css_hide_and_seek_1.6.0.dev4.zip) (please read release note for more information)
 
 Player Commands
 --------------------------------
