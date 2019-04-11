@@ -1,12 +1,11 @@
 #pragma semicolon 1
 
 // Sourcemod includes
-#include <sourcemod>
-#include <sdktools>
-#include <sdktools_stringtables>
-#include <sdkhooks>
-#include <string>
 #include <cstrike>
+#include <sdkhooks>
+#include <sdktools>
+#include <sourcemod>
+#include <string>
 
 //Third party includes
 #include <smlib> // https://github.com/bcserv/smlib
@@ -194,7 +193,7 @@ public OnPluginStart()
 	g_cvOpacityEnable = 		CreateConVar("sm_hns_opacity_enable", "0", "Should T get more invisible on low hp, 0 = off/1 = on.", 0, true, 0.0, true, 1.0);
 	g_cvHiderSpeed  = 		CreateConVar("sm_hns_hidersspeed", "1.00", "Hiders speed (Default: 1.00).", 0, true, 1.00, true, 3.00);
 	g_cvDisableRightKnife =		CreateConVar("sm_hns_disable_rightknife", "1", "Disable rightclick for CTs with knife? Prevents knifing without losing heatlh. (Default: 1).", 0, true, 0.00, true, 1.00);
-	g_cvDisableDucking =		CreateConVar("sm_hns_disable_ducking", "1", "Disable ducking. (Default: 1).", 0, true, 0.00, true, 1.00);
+	g_cvDisableDucking =		CreateConVar("sm_hns_disable_ducking", "1", "Disable ducking: 0 = Disabled / 1 = Every one / 2 = Only Ts (Default: 1).", 0, true, 0.00, true, 2.00);
 	g_cvAutoThirdPerson =		CreateConVar("sm_hns_auto_thirdperson", "1", "Enable thirdperson view for hiders automatically. (Default: 1)", 0, true, 0.00, true, 1.00);
 	g_cvHiderFreezeMode =		CreateConVar("sm_hns_hider_freeze_mode", "2", "0: Disables /freeze command for hiders, 1: Only freeze on position, be able to move camera, 2: Freeze completely (no cameramovements) (Default: 2)", 0, true, 0.00, true, 2.00);
 	g_cvHideBlood =			CreateConVar("sm_hns_hide_blood", "1", "Hide blood on hider damage. (Default: 1)", 0, true, 0.00, true, 1.00);
@@ -545,35 +544,37 @@ public OnClientDisconnect(client)
 	}*/
 }
 
-// prevent players from ducking
+// forbiden player actions
 public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:angles[3], &weapon, &subtype, &cmdnum, &tickcount, &seed, mouse[2])
 {
 	if(!g_bEnableHnS)
 		return Plugin_Continue;
 	
 	new iInitialButtons = buttons;
-	
-	decl String:weaponName[30];
-	// don't allow ct's to shoot in the beginning of the round
 	new team = GetClientTeam(client);
+	
+	// don't allow ct's to shoot in the beginning of the round
+	decl String:weaponName[30];
 	GetClientWeapon(client, weaponName, sizeof(weaponName));
 	if(team == CS_TEAM_CT && g_bIsCTWaiting[client] && (buttons & IN_ATTACK || buttons & IN_ATTACK2))
 	{
 		buttons &= ~IN_ATTACK;
 		buttons &= ~IN_ATTACK2;
-	} // disable rightclick knifing for cts
+	} 
+	// disable rightclick knifing for cts
 	else if(team == CS_TEAM_CT && GetConVarBool(g_cvDisableRightKnife) && buttons & IN_ATTACK2 && !strcmp(weaponName, "weapon_knife"))
 	{
 		buttons &= ~IN_ATTACK2;
 	}
 	
-	// Modelfix
+	// Modelfix 
 	if(g_iFixedModelHeight[client] != 0.0 && IsPlayerAlive(client) && GetClientTeam(client) == CS_TEAM_T)
 	{
 		new Float:vecVelocity[3];
 		vecVelocity[0] = GetEntPropFloat(client, Prop_Send, "m_vecVelocity[0]");
 		vecVelocity[1] = GetEntPropFloat(client, Prop_Send, "m_vecVelocity[1]");
 		vecVelocity[2] = GetEntPropFloat(client, Prop_Send, "m_vecVelocity[2]");
+		
 		// Player isn't moving
 		if(vecVelocity[0] == 0.0 && vecVelocity[1] == 0.0 && vecVelocity[2] == 0.0 && !(buttons & IN_FORWARD || buttons & IN_BACK || buttons & IN_MOVELEFT || buttons & IN_MOVERIGHT || buttons & IN_JUMP))
 		{
@@ -623,8 +624,15 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
 	}
 	
 	// disable ducking for everyone
-	if(buttons & IN_DUCK && GetConVarBool(g_cvDisableDucking))
+	if (buttons & IN_DUCK && GetConVarInt(g_cvDisableDucking) == 1)
+	{
 		buttons &= ~IN_DUCK;
+	}
+	//disable ducking for Ts only
+	else if (buttons & IN_DUCK && GetConVarInt(g_cvDisableDucking) == 2 && team == CS_TEAM_T)
+	{
+		buttons &= ~IN_DUCK;
+	}
 	
 	// disable use for everyone
 	if(GetConVarBool(g_cvDisableUse) && buttons & IN_USE)
@@ -1891,7 +1899,10 @@ public Action:Play_Whistle(client,args)
 	
 	if(g_iWhistleCount[client] < cvarWhistleTimes)
 	{
-		EmitSoundToAll(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], client, SNDCHAN_AUTO, SNDLEVEL_GUNFIRE);
+		new Float:Client_Position[3];
+		GetClientAbsOrigin(client, Client_Position);
+		Client_Position[2] += 8.0;
+		EmitAmbientSound(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], Client_Position, SOUND_FROM_WORLD, SNDLEVEL_AIRCRAFT, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, 0.0);
 		PrintToChatAll("%s%N %t", PREFIX, client, "whistled");
 		g_iWhistleCount[client]++;
 		PrintToChat(client, "%s%t", PREFIX, "whistles left", (cvarWhistleTimes-g_iWhistleCount[client]));
@@ -2070,7 +2081,10 @@ public Action:ForceWhistle(client, args)
 	
 	if(GetClientTeam(target) == CS_TEAM_T && IsPlayerAlive(target))
 	{
-		EmitSoundToAll(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], target, SNDCHAN_AUTO, SNDLEVEL_GUNFIRE);
+		new Float:Target_Position[3];
+		GetClientEyePosition(target, Target_Position);
+		Target_Position[2] += 8.0;
+		EmitAmbientSound(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], Target_Position, SOUND_FROM_WORLD, SNDLEVEL_AIRCRAFT, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, 0.0);
 		PrintToChatAll("%s%N %t", PREFIX, target, "whistled");
 	}
 	else
