@@ -1,3 +1,11 @@
+/*
+*
+* Hide and Seek
+* Translation main file
+* Version: 2019.04.13
+*
+*/
+
 "Phrases"
 {
 	
@@ -67,7 +75,12 @@
 	{
 		"en"			"whistled!"
 	}
-    
+
+	"autowhistle"
+	{
+		"en"			"Automatic Whistle"
+	}
+
 	"whistles left"
 	{
 		"#format"		"{1:d}"
@@ -243,7 +256,7 @@
 
 	"is heightfixed"
 	{
-		"en"			"This model is bugged and uses a fixed height. You will bounce up frequently. ({1})"
+		"en"			"This model is bugged and uses a fixed height. You will bounce up frequently."
 	}
 
 	"tax charged"
