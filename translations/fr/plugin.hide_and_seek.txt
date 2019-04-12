@@ -2,7 +2,7 @@
 *
 * Hide and Seek
 * Fench Translation by blackdevil72
-* Version: 2019.04.09
+* Version: 2019.04.13
 *
 */
 
@@ -16,7 +16,7 @@
 	
 	"Model Changed"
 	{
-		"fr"			"Vous êtes un(e)"
+		"fr"			"Vous êtes maintenant un(e)"
 	}
 
 	"Modelmenu Disabled"
@@ -26,7 +26,7 @@
 
 	"Did not choose model"
 	{
-		"fr"			"Vous n'avez pas choisis de Modèle. Choix Automatique..."
+		"fr"			"Vous n'avez pas choisi de Modèle. Choix Automatique..."
 	}
 	
 	"Print to console"
@@ -46,7 +46,7 @@
 	
 	"CT team is full"
 	{
-		"fr"			"L'équipe CT est pleine !"
+		"fr"			"L'équipe Counter-Terroristes est pleine !"
 	}
 
 	"Type again for ego"
@@ -66,12 +66,17 @@
 
 	"Go search"
 	{
-		"fr"			"Vous pensez que les Terroristes sont mal caché ? Allez les trouver !"
+		"fr"			"Vous pensez que les Terroristes sont mal caché ? Cherchez les !"
 	}
 
 	"whistled"
 	{
 		"fr"			"siffle !"
+	}
+
+	"autowhistle"
+	{
+		"en"			"Sifflement Automatique"
 	}
     
 	"whistles left"
@@ -86,7 +91,7 @@
 
 	"T type /whistle"
 	{
-		"fr"			"Les Terroristes peuvent siffler pour aider les CT. Utilisez \"/whistle\" dans le tchat !"
+		"fr"			"Les Terroristes peuvent siffler pour aider les CTs. Utilisez \"/whistle\" dans le tchat !"
 	}
 	
 	"whistle limit exceeded"
@@ -161,7 +166,7 @@
 
 	"Instructions CT 1"
 	{
-		"fr"			"Les CTs doivent trouvez les Terroristes cachés, ils peuvent être déguisés en n'importe quoi (d'un Baril de pétrole à un simple pot de fleurs)."
+		"fr"			"Les CTs doivent trouver les Terroristes cachés, ils peuvent être déguisés en n'importe quoi (d'un baril de pétrole à un simple pot de fleurs)."
 	}
 
 	"Instructions CT 2"
@@ -181,7 +186,7 @@
 
 	"Instructions T 1"
 	{
-		"fr"			"Les Terroristes choisissent un Modèle commun à la map, puis doivent trouver la meilleurs cachette pour ne pas être reconnus."
+		"fr"			"Les Terroristes choisissent un Modèle commun à la map, puis doivent trouver la meilleurs cachette pour ne pas être reconnu."
 	}
 
 	"Instructions T 2"
@@ -241,7 +246,7 @@
 
 	"is heightfixed"
 	{
-		"fr"			"Ce Modèle est buggué et utilise une position fixe. Vous sauterez régulièrement. ({1})"
+		"fr"			"Ce Modèle est buggué et utilise une position fixe. Vous sauterez régulièrement."
 	}
 
 	"tax charged"
