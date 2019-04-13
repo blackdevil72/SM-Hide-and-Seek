@@ -10,9 +10,6 @@
 // Third party includes
 #include <smlib> // https://github.com/bcserv/smlib
 
-// Hide and Seek includes
-//#include <hide_and_seek/test.sp>
-
 #define PLUGIN_VERSION "1.6.0 Dev"
 
 // that's what GetLanguageCount() got me
@@ -810,16 +807,16 @@ public Action:Event_OnPlayerSpawn(Handle:event, const String:name[], bool:dontBr
 				g_hWhistleAuto = INVALID_HANDLE;
 			}
 
-			if(!g_bWhistlingAllowed && GetConVarBool(g_cvWhistle) == true && GetConVarFloat(g_cvWhistleDelay) > 0.0)
+			if(!g_bWhistlingAllowed && GetConVarBool(g_cvWhistle) && GetConVarFloat(g_cvWhistleDelay) > 0.0)
 			{
 				g_hWhistleDelay = CreateTimer(GetConVarFloat(g_cvWhistleDelay), Timer_AllowWhistle, client, TIMER_FLAG_NO_MAPCHANGE);
 			}
-			else if (GetConVarBool(g_cvWhistleAuto) == true && GetConVarBool(g_cvWhistle) == true)
+			else if (GetConVarBool(g_cvWhistleAuto) && GetConVarBool(g_cvWhistle))
 			{
 				g_bWhistlingAllowed = true;
 				g_hWhistleAuto = CreateTimer(GetConVarFloat(g_cvWhistleAutoTimer), Timer_AutoWhistle, client, TIMER_FLAG_NO_MAPCHANGE);
 			}
-			else if (GetConVarBool(g_cvWhistle) == true)
+			else if (GetConVarBool(g_cvWhistle))
 			{
 				g_bWhistlingAllowed = true;
 			}
@@ -985,7 +982,7 @@ public Action:Event_OnRoundEnd(Handle:event, const String:name[], bool:dontBroad
 	if(!g_bEnableHnS)
 		return Plugin_Continue;
 
-	// round has ended. used to not decrease seekers hp on shoot 
+	// round has ended. used to not decrease seekers hp on shoot
 	g_bRoundEnded = true;
 	g_bWhistlingAllowed = false;
 
@@ -1112,16 +1109,11 @@ public Action:Event_OnPlayerDeath(Handle:event, const String:name[], bool:dontBr
 		g_bIsFreezed[client] = false;
 	}
 
-	//new ragdoll = GetEntPropEnt(client, Prop_Send, "m_hRagdoll");
-	//if (ragdoll<0)
-	//	return Plugin_Continue;
-	//
-	//RemoveEdict(ragdoll);
-
 	if (GetClientTeam(client) == CS_TEAM_T)
 		Effect_DissolvePlayerRagDoll(client, DISSOLVE_ELECTRICAL_LIGHT);
 	else
 		Effect_DissolvePlayerRagDoll(client, DISSOLVE_NORMAL);
+	//	RemoveEdict(GetEntPropEnt(client, Prop_Send, "m_hRagdoll"));
 
 	return Plugin_Continue;
 }
@@ -1498,7 +1490,14 @@ public Action:Timer_AllowWhistle(Handle:timer, any:data)
 {
 	g_bWhistlingAllowed = true;
 	g_hWhistleDelay = INVALID_HANDLE;
-	g_hWhistleAuto = CreateTimer(GetConVarFloat(g_cvWhistleAutoTimer), Timer_AutoWhistle, data, TIMER_FLAG_NO_MAPCHANGE);
+
+	PrintToChatAll("%s%t", PREFIX, "whistle allowed");
+
+	if (GetConVarBool(g_cvWhistleAuto))
+	{
+		g_hWhistleAuto = CreateTimer(GetConVarFloat(g_cvWhistleAutoTimer), Timer_AutoWhistle, data, TIMER_FLAG_NO_MAPCHANGE);
+	}
+
 	return Plugin_Stop;
 }
 

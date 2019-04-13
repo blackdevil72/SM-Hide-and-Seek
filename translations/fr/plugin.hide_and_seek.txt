@@ -76,7 +76,7 @@
 
 	"autowhistle"
 	{
-		"en"			"Sifflement Automatique"
+		"fr"			"Sifflement Automatique"
 	}
     
 	"whistles left"
@@ -87,6 +87,11 @@
 	"Whistling not allowed yet"
 	{
 		"fr"			"Siffler n'est pas autorisé pour le moments."
+	}
+
+	"whistle allowed"
+	{
+		"fr"			"Siffler est maintenant autorisé."
 	}
 
 	"T type /whistle"

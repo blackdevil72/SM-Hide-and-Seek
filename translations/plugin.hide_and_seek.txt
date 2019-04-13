@@ -69,7 +69,7 @@
 	"Go search"
 	{
 		"en"			"You don't think all terrorists are hidden well? Go find them!"
-	}
+	}	
 
 	"whistled"
 	{
@@ -90,6 +90,11 @@
 	"Whistling not allowed yet"
 	{
 		"en"			"Whistling is not allowed yet."
+	}
+
+	"whistle allowed"
+	{
+		"en"			"Whistling is now allowed."
 	}
 
 	"T type /whistle"
