@@ -18,7 +18,7 @@
 #define PREFIX "\x04Hide and Seek \x01> \x03"
 
 // plugin cvars
-ConVar g_cvVersion;
+//ConVar g_cvVersion;
 ConVar g_cvEnable;
 ConVar g_cvFreezeCTs;
 ConVar g_cvFreezeTime;
@@ -173,7 +173,7 @@ public Plugin myinfo =
 public OnPluginStart()
 {
 	// Hide and Seek Versiion cvar
-	g_cvVersion = 			CreateConVar("sm_hns_version", PLUGIN_VERSION, "Hide and seekVersion", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	//g_cvVersion = 				CreateConVar("sm_hns_version", PLUGIN_VERSION, "Hide and seekVersion", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 
 	// Config cvars
 	g_cvEnable = 				CreateConVar("sm_hns_enable", "1", "Enable the Hide and Seek Mod?", 0, true, 0.0, true, 1.0);
@@ -253,7 +253,7 @@ public OnPluginStart()
 
 	RegAdminCmd("sm_hns_force_whistle", ForceWhistle, ADMFLAG_CHAT, "Force a player to whistle");
 	RegAdminCmd("sm_hns_reload_models", ReloadModels, ADMFLAG_RCON, "Reload the modellist from the map config file.");
-	RegAdminCmd("sm_hns_plugin_verion", PrintHnsVersion, ADMFLAG_CHAT, "Print Hide and Seek plugin version.");
+	RegAdminCmd("sm_hns_plugin_version", PrintHnsVersion, ADMFLAG_CHAT, "Print Hide and Seek plugin version.");
 
 	// Loading translations
 	LoadTranslations("plugin.hide_and_seek");
@@ -1643,18 +1643,13 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 		}
 	}
 
-	//PrintToServer("Debug: %d players are flagged to switch at the end of the round.", iToBeSwitched);
 	float fRatio = FloatDiv(float(iCTCount), float(iTCount));
 	float fCFGRatio = FloatDiv(1.0, GetConVarFloat(g_cvCTRatio));
-
-	//PrintToServer("Debug: Initial CTCount: %d TCount: %d Ratio: %f, CFGRatio: %f", iCTCount, iTCount, fRatio, fCFGRatio);
-
 	char sName[64];
 	
 	// There are more CTs than we want in the CT team and it's not the first CT
 	if ((iCTCount > 0 || iTCount > 0) && iCTCount != 1 && fRatio > fCFGRatio)
 	{
-		//PrintToServer("Debug: Too much CTs! Taking action...");
 		// Any players flagged to be moved at the end of the round?
 		if (iToBeSwitched > 0)
 		{
@@ -1669,12 +1664,9 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 					GetClientName(CountToBeSwitched, sName, sizeof(sName));
 					PrintToChatAll("%s%t.", PREFIX, "stop switch", sName);
 
-					//PrintToServer("Debug: Unflagged one player from being switched to T. CTCount: %d TCount: %d Ratio: %f", iCTCount, iTCount, FloatDiv(float(iCTCount), float(iTCount)));
-
 					// switched enough players?
 					if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
 					{
-						//PrintToServer("Debug: Switched enough players after unflagging.");
 						return Plugin_Stop;
 					}
 				}
@@ -1692,12 +1684,9 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 			GetClientName(client, sName, sizeof(sName));
 			PrintToChatAll("%s%t", PREFIX, "switched", sName);
 
-			//PrintToServer("Debug: Switched the player %s straight back to T. CTCount: %d TCount: %d Ratio: %f", sName, iCTCount, iTCount, FloatDiv(float(iCTCount), float(iTCount)));
-
 			// switched enough players?
 			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
 			{
-				//PrintToServer("Debug: Switched enough players after reversing the last change.");
 				return Plugin_Stop;
 			}
 		}
@@ -1714,7 +1703,6 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 				ChangeClientTeam(g_iLastJoinedCT, CS_TEAM_T);
 				GetClientName(g_iLastJoinedCT, sName, sizeof(sName));
 				PrintToChatAll("%s%t", PREFIX, "switched", sName);
-				//PrintToServer("Debug: Switched the last joined CT %s to T. CTCount: %d TCount: %d Ratio: %f", sName, iCTCount, iTCount, FloatDiv(float(iCTCount), float(iTCount)));
 			}
 
 			else if (IsClientInGame(g_iLastJoinedCT))
@@ -1725,13 +1713,11 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 				
 				GetClientName(g_iLastJoinedCT, sName, sizeof(sName));
 				PrintToChatAll("%s%t", PREFIX, "going to switch", sName);
-				//PrintToServer("Debug: Flagged the last joined CT %s to switch at roundend. CTCount: %d TCount: %d Ratio: %f", sName, iCTCount, iTCount, FloatDiv(float(iCTCount), float(iTCount)));
 			}
 
 			// switched enough players?
 			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
 			{
-				//PrintToServer("Debug: Switched enough players after checking the last joined CT.");
 				return Plugin_Stop;
 			}
 		}
@@ -1743,7 +1729,6 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 			// switched enough players?
 			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
 			{
-				//PrintToServer("Debug: Switched enough players after switching dead cts");
 				return Plugin_Stop;
 			}
 
@@ -1756,7 +1741,6 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 				ChangeClientTeam(CountToBeSwitched2, CS_TEAM_T);
 				GetClientName(CountToBeSwitched2, sName, sizeof(sName));
 				PrintToChatAll("%s%t", PREFIX, "switched", sName);
-				//PrintToServer("Debug: Switched dead CT %s to T. CTCount: %d TCount: %d Ratio: %f", sName, iCTCount, iTCount, FloatDiv(float(iCTCount), float(iTCount)));
 			}
 		}
 
@@ -1766,7 +1750,6 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 			// switched enough players?
 			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
 			{
-				//PrintToServer("Debug: Switched enough players after flagging alive CTs");
 				return Plugin_Stop;
 			}
 
@@ -1778,7 +1761,6 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 
 				GetClientName(CountToBeSwitched3, sName, sizeof(sName));
 				PrintToChatAll("%s%t", PREFIX, "going to switch", sName);
-				//PrintToServer("Debug: Flagging alive CT %s to switch to T at roundend. CTCount: %d TCount: %d Ratio: %f", sName, iCTCount, iTCount, FloatDiv(float(iCTCount), float(iTCount)));
 			}
 		}
 	}
@@ -1994,13 +1976,10 @@ public Action Command_JoinTeam(client, args)
 		float fRatio = FloatDiv(float(iCTCount), float(iTCount));
 		float fCFGRatio = FloatDiv(1.0, GetConVarFloat(g_cvCTRatio));
 
-		//PrintToServer("Debug: Player %N wants to join CT. CTCount: %d TCount: %d Ratio: %f", client, iCTCount, iTCount, FloatDiv(float(iCTCount), float(iTCount)));
-
 		// There are more CTs than we want in the CT team.
 		if (iCTCount > 1 && fRatio > fCFGRatio)
 		{
 			PrintCenterText(client, "CT team is full");
-			//PrintToServer("Debug: Blocked.");
 			return Plugin_Handled;
 		}
 	}
@@ -2269,8 +2248,8 @@ public Action PrintHnsVersion(client, args)
 		return Plugin_Handled;
 	}
 
-	PrintToChatAll("[HnS] Hide and Seek version ", g_cvVersion);
-	PrintToServer("[HnS] Hide and Seek version ", g_cvVersion);
+	PrintToChatAll("\x04[HnS] \x03Hide and Seek version %s", PLUGIN_VERSION);
+	PrintToServer("[HnS] Hide and Seek version %s", PLUGIN_VERSION);
 	return Plugin_Handled;
 }
 
