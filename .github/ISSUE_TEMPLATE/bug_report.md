@@ -23,7 +23,7 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
+** Please complete the following information:**
  - Sourcemod Verion: [e.g. 1.9 Build 6276]
  - Hide and Seek Version: [e.g. 1.6.0]
 
