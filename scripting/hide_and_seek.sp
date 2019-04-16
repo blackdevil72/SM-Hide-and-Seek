@@ -18,7 +18,7 @@
 #define PREFIX "\x04Hide and Seek \x01> \x03"
 
 // plugin cvars
-//ConVar g_cvVersion;
+ConVar g_cvVersion;
 ConVar g_cvEnable;
 ConVar g_cvFreezeCTs;
 ConVar g_cvFreezeTime;
@@ -164,7 +164,7 @@ float g_fSpawnPosition[MAXPLAYERS+1][3];
 public Plugin myinfo =
 {
 	name = "Hide and Seek",
-	author = "blackdevil72 | Credit to: Selax & Peace-Maker",
+	author = "Maintainer: blackdevil72 | Credit to: Selax & Peace-Maker",
 	description = "Terrorists set a model and hide, CT seek terrorists.",
 	version = PLUGIN_VERSION,
 	url = "https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek"
@@ -173,7 +173,7 @@ public Plugin myinfo =
 public OnPluginStart()
 {
 	// Hide and Seek Versiion cvar
-	//g_cvVersion = 				CreateConVar("sm_hns_version", PLUGIN_VERSION, "Hide and seekVersion", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	g_cvVersion = 				CreateConVar("sm_hns_version", PLUGIN_VERSION, "Hide and Seek Version", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 
 	// Config cvars
 	g_cvEnable = 				CreateConVar("sm_hns_enable", "1", "Enable the Hide and Seek Mod?", 0, true, 0.0, true, 1.0);
@@ -248,7 +248,6 @@ public OnPluginStart()
 	RegConsoleCmd("hidehelp", Display_Help, "Displays a panel with informations how to play.");
 	RegConsoleCmd("freeze", Freeze_Cmd, "Toggles freezing for hiders.");
 
-
 	RegConsoleCmd("overview_mode", Block_Cmd);
 
 	RegAdminCmd("sm_hns_force_whistle", ForceWhistle, ADMFLAG_CHAT, "Force a player to whistle");
@@ -260,16 +259,16 @@ public OnPluginStart()
 	LoadTranslations("common.phrases"); // for FindTarget()
 
 	// set the default values for cvar checking
-	for (int x = 1; x<=MaxClients; x++)
+	for (int CountDefValClient = 1; CountDefValClient <= MaxClients; CountDefValClient++)
 	{
-		for (int y = 0; y<sizeof(cheat_commands); y++)
+		for (int CountDefVal = 0; CountDefVal < sizeof(cheat_commands); CountDefVal++)
 		{
-			g_bConVarViolation[x][y] = false;
-			g_iConVarMessage[x][y] = 0;
+			g_bConVarViolation[CountDefValClient][CountDefVal] = false;
+			g_iConVarMessage[CountDefValClient][CountDefVal] = 0;
 		}
 
-		if (IsClientInGame(x))
-			OnClientPutInServer(x);
+		if (IsClientInGame(CountDefValClient))
+			OnClientPutInServer(CountDefValClient);
 	}
 
 	if (g_bEnableHnS)
@@ -365,6 +364,7 @@ public OnMapStart()
 	BuildMainMenu();
 
 	PrecacheSound("radio/go.wav", true);
+	PrecacheSound("buttons/weapon_cant_buy.wav", true);
 
 	// prevent us from bugging after mapchange
 	g_iFirstCTSpawn = 0;
@@ -1979,7 +1979,8 @@ public Action Command_JoinTeam(client, args)
 		// There are more CTs than we want in the CT team.
 		if (iCTCount > 1 && fRatio > fCFGRatio)
 		{
-			PrintCenterText(client, "CT team is full");
+			EmitSoundToClient(client," buttons/weapon_cant_buy.wav");
+			PrintHintText(client, "%t", "CT team is full");
 			return Plugin_Handled;
 		}
 	}
@@ -2160,8 +2161,8 @@ public Action Freeze_Cmd(client,args)
 		}
 
 		// Stop him
-		float TeleportVelocity[3] = {0.0,0.0,0.0};
-		TeleportEntity(client, NULL_VECTOR, NULL_VECTOR, TeleportVelocity);
+		float NullVelocity[3] = {0.0,0.0,0.0};
+		TeleportEntity(client, NULL_VECTOR, NULL_VECTOR, NullVelocity);
 
 		g_bIsFreezed[client] = true;
 		PrintToChat(client, "%s%t", PREFIX, "Hider Freezed");
@@ -2248,8 +2249,10 @@ public Action PrintHnsVersion(client, args)
 		return Plugin_Handled;
 	}
 
-	PrintToChatAll("\x04[HnS] \x03Hide and Seek version %s", PLUGIN_VERSION);
-	PrintToServer("[HnS] Hide and Seek version %s", PLUGIN_VERSION);
+	char CvarPluginVersion[PLATFORM_MAX_PATH];
+	GetConVarString(g_cvVersion, CvarPluginVersion, PLATFORM_MAX_PATH);
+	PrintToChatAll("\x04[HnS] \x03Hide and Seek version %s", CvarPluginVersion);
+	PrintToServer("[HnS] Hide and Seek version %s", CvarPluginVersion);
 	return Plugin_Handled;
 }
 
