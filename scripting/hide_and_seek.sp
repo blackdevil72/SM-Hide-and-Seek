@@ -10,7 +10,7 @@
 // Third party includes
 #include <smlib> // https://github.com/bcserv/smlib
 
-#define PLUGIN_VERSION "1.6.0 Dev"
+#define PLUGIN_VERSION "1.6.0 Dev 2019-04-18"
 
 // that's what GetLanguageCount() got me
 #define MAX_LANGUAGES 27
@@ -151,7 +151,6 @@ int g_iWhistleCount[MAXPLAYERS+1] = {0,...};
 Handle g_hWhistleDelay = INVALID_HANDLE;
 Handle g_hWhistleAuto = INVALID_HANDLE;
 bool g_bWhistlingAllowed;
-char whistle_sounds_set[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
 char whistle_sounds_path[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
 
 // Teambalance
@@ -443,14 +442,14 @@ public OnMapEnd()
 
 	CloseHandle(kv);
 
-	for (int CountLang = 0; CountLang < MAX_LANGUAGES; CountLang++)
+	for (int CountLangMapEnd = 0; CountLangMapEnd < MAX_LANGUAGES; CountLangMapEnd++)
 	{
-		if (g_hModelMenu[CountLang] != INVALID_HANDLE)
+		if (g_hModelMenu[CountLangMapEnd] != INVALID_HANDLE)
 		{
-			CloseHandle(g_hModelMenu[CountLang]);
-			g_hModelMenu[CountLang] = INVALID_HANDLE;
+			CloseHandle(g_hModelMenu[CountLangMapEnd]);
+			g_hModelMenu[CountLangMapEnd] = INVALID_HANDLE;
 		}
-		Format(g_sModelMenuLanguage[CountLang], 4, "");
+		Format(g_sModelMenuLanguage[CountLangMapEnd], 4, "");
 	}
 
 	g_iFirstCTSpawn = 0;
@@ -510,10 +509,10 @@ public OnClientDisconnect(client)
 	// set the default values for cvar checking
 	if (!IsFakeClient(client))
 	{
-		for (int CountCvar = 0; CountCvar < sizeof(cheat_commands); CountCvar++)
+		for (int CountClientCvarOnDc = 0; CountClientCvarOnDc < sizeof(cheat_commands); CountClientCvarOnDc++)
 		{
-			g_bConVarViolation[client][CountCvar] = false;
-			g_iConVarMessage[client][CountCvar] = 0;
+			g_bConVarViolation[client][CountClientCvarOnDc] = false;
+			g_iConVarMessage[client][CountClientCvarOnDc] = 0;
 		}
 
 		g_bInThirdPersonView[client] = false;
@@ -1979,8 +1978,8 @@ public Action Command_JoinTeam(client, args)
 		// There are more CTs than we want in the CT team.
 		if (iCTCount > 1 && fRatio > fCFGRatio)
 		{
-			EmitSoundToClient(client," buttons/weapon_cant_buy.wav");
-			PrintHintText(client, "%t", "CT team is full");
+			EmitSoundToClient(client, "buttons/weapon_cant_buy.wav");
+			PrintHintText(client, "%t", "CT team is fulll");
 			return Plugin_Handled;
 		}
 	}
@@ -2526,7 +2525,7 @@ BuildMainMenu()
 		}
 
 		// roll through all available languages
-		for(int CountLangMenu = 0; CountLangMenu < GetLanguageCount(); CountLangMenu++)
+		for (int CountLangMenu = 0; CountLangMenu < GetLanguageCount(); CountLangMenu++)
 		{
 			GetLanguageInfo(CountLangMenu, lang, sizeof(lang));
 			// search for the translation
@@ -2586,7 +2585,7 @@ BuildMainMenu()
 
 GetLanguageID(const char[] langCode)
 {
-	for(int CountLangId = 0; CountLangId <MAX_LANGUAGES; CountLangId++)
+	for (int CountLangId = 0; CountLangId <MAX_LANGUAGES; CountLangId++)
 	{
 		if (StrEqual(g_sModelMenuLanguage[CountLangId], langCode))
 			return CountLangId;
@@ -2868,10 +2867,10 @@ public OnChangeHiderSpeed(Handle convar, const char[] oldValue, const char[] new
 	if (!g_bEnableHnS)
 		return;
 
-	for(int CountSpeedChange = 1; CountSpeedChange <= MaxClients; CountSpeedChange++)
+	for (int CountClientSpeed = 1; CountClientSpeed <= MaxClients; CountClientSpeed++)
 	{
-		if (IsClientInGame(CountSpeedChange) && IsPlayerAlive(CountSpeedChange) && GetClientTeam(CountSpeedChange) == CS_TEAM_T)
-			SetEntDataFloat(CountSpeedChange, g_flLaggedMovementValue, GetConVarFloat(g_cvHiderSpeed), true);
+		if (IsClientInGame(CountClientSpeed) && IsPlayerAlive(CountClientSpeed) && GetClientTeam(CountClientSpeed) == CS_TEAM_T)
+			SetEntDataFloat(CountClientSpeed, g_flLaggedMovementValue, GetConVarFloat(g_cvHiderSpeed), true);
 	}
 }
 
@@ -3138,30 +3137,30 @@ public ClientConVar(QueryCookie cookie, client, ConVarQueryResult result, const 
 
 	bool match = StrEqual(cvarValue, "0");
 
-	for(int i = 0; i < sizeof(cheat_commands); i++)
+	for (int CountClientCvar = 0; CountClientCvar < sizeof(cheat_commands); CountClientCvar++)
 	{
-		if (!StrEqual(cheat_commands[i], cvarName))
+		if (!StrEqual(cheat_commands[CountClientCvar], cvarName))
 			continue;
 
 		if (!match)
 		{
-			g_bConVarViolation[client][i] = true;
+			g_bConVarViolation[client][CountClientCvar] = true;
 			
 			// only spam the message every 5 checks
-			if (g_iConVarMessage[client][i] == 0)
+			if (g_iConVarMessage[client][CountClientCvar] == 0)
 			{
 				PrintToChat(client, "%s%t\x04 %s 0", PREFIX, "Print to console", cvarName);
 				PrintHintText(client, "%t %s 0", "Print to console", cvarName);
 			}
 
-			g_iConVarMessage[client][i]++;
+			g_iConVarMessage[client][CountClientCvar]++;
 
-			if (g_iConVarMessage[client][i] > 5)
-				g_iConVarMessage[client][i] = 0;
+			if (g_iConVarMessage[client][CountClientCvar] > 5)
+				g_iConVarMessage[client][CountClientCvar] = 0;
 		}
 
 		else
-			g_bConVarViolation[client][i] = false;
+			g_bConVarViolation[client][CountClientCvar] = false;
 	}
 }
 
@@ -3188,6 +3187,7 @@ public LoadWhistleSet()
 
 public LoadWhistleSound(const char cvarWhistleSet[PLATFORM_MAX_PATH])
 {
+	char whistle_sounds_set[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
 	char bufferString[PLATFORM_MAX_PATH];
 	Handle SoundSetsKV = CreateKeyValues("SetsList");
 	BuildPath(Path_SM,bufferString, PLATFORM_MAX_PATH, "configs/hide_and_seek/whistle/HnS_SetsList.cfg");
@@ -3199,12 +3199,12 @@ public LoadWhistleSound(const char cvarWhistleSet[PLATFORM_MAX_PATH])
 		{
 			if (KvJumpToKey(SoundSetsKV, cvarWhistleSet))
 			{
-				for (int i = 0; i < WHISTLE_SOUNDS_MAX; i++)
+				for (int CountWhistleSound = 0; CountWhistleSound < WHISTLE_SOUNDS_MAX; CountWhistleSound++)
 				{
-					IntToString(i, bufferString, PLATFORM_MAX_PATH);
-					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
-					whistle_sounds_path[i] = whistle_sounds_set[i];
-					PrecacheSound(whistle_sounds_path[i], true);
+					IntToString(CountWhistleSound, bufferString, PLATFORM_MAX_PATH);
+					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[CountWhistleSound], PLATFORM_MAX_PATH);
+					whistle_sounds_path[CountWhistleSound] = whistle_sounds_set[CountWhistleSound];
+					PrecacheSound(whistle_sounds_path[CountWhistleSound], true);
 				}
 			}
 
@@ -3219,12 +3219,12 @@ public LoadWhistleSound(const char cvarWhistleSet[PLATFORM_MAX_PATH])
 		{
 			if (KvJumpToKey(SoundSetsKV, cvarWhistleSet))
 			{
-				for (int i = 0; i < WHISTLE_SOUNDS_MAX; i++)
+				for (int CountWhistleSound = 0; CountWhistleSound < WHISTLE_SOUNDS_MAX; CountWhistleSound++)
 				{
-					IntToString(i, bufferString, PLATFORM_MAX_PATH);
-					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[i], PLATFORM_MAX_PATH);
+					IntToString(CountWhistleSound, bufferString, PLATFORM_MAX_PATH);
+					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[CountWhistleSound], PLATFORM_MAX_PATH);
 
-					if (StrEqual(whistle_sounds_set[i],""))
+					if (StrEqual(whistle_sounds_set[CountWhistleSound],""))
 					{
 						CloseHandle(SoundSetsKV);
 						SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
@@ -3232,10 +3232,10 @@ public LoadWhistleSound(const char cvarWhistleSet[PLATFORM_MAX_PATH])
 
 					else
 					{
-						whistle_sounds_path[i] = whistle_sounds_set[i];
-						PrecacheSound(whistle_sounds_path[i], true);
-						Format(whistle_sounds_set[i], PLATFORM_MAX_PATH, "sound/%s", whistle_sounds_set[i]);
-						AddFileToDownloadsTable(whistle_sounds_set[i]);
+						whistle_sounds_path[CountWhistleSound] = whistle_sounds_set[CountWhistleSound];
+						PrecacheSound(whistle_sounds_path[CountWhistleSound], true);
+						Format(whistle_sounds_set[CountWhistleSound], PLATFORM_MAX_PATH, "sound/%s", whistle_sounds_set[CountWhistleSound]);
+						AddFileToDownloadsTable(whistle_sounds_set[CountWhistleSound]);
 					}
 				}
 			}
