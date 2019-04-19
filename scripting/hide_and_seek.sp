@@ -5,12 +5,11 @@
 #include <sdkhooks>
 #include <sdktools>
 #include <sourcemod>
-#include <string>
 
 // Third party includes
 #include <smlib> // https://github.com/bcserv/smlib
 
-#define PLUGIN_VERSION "1.6.0 Dev 2019-04-18"
+#define PLUGIN_VERSION "1.6.0 Dev"
 
 // that's what GetLanguageCount() got me
 #define MAX_LANGUAGES 27
@@ -151,7 +150,7 @@ int g_iWhistleCount[MAXPLAYERS+1] = {0,...};
 Handle g_hWhistleDelay = INVALID_HANDLE;
 Handle g_hWhistleAuto = INVALID_HANDLE;
 bool g_bWhistlingAllowed;
-char whistle_sounds_path[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
+char WhistleSoundPath[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
 
 // Teambalance
 int g_iLastJoinedCT = -1;
@@ -480,7 +479,7 @@ public OnMapEnd()
 	}
 }
 
-public OnClientPutInServer(client)
+public OnClientPutInServer(int client)
 {
 	if (!g_bEnableHnS)
 		return;
@@ -501,7 +500,7 @@ public OnClientPutInServer(client)
 	SDKHook(client, SDKHook_PostThinkPost, Hook_OnPostThinkPost);
 }
 
-public OnClientDisconnect(client)
+public OnClientDisconnect(int client)
 {
 	if (!g_bEnableHnS)
 		return;
@@ -571,7 +570,7 @@ public OnClientDisconnect(client)
 }
 
 // forbiden player actions
-public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float angles[3], &weapon, &subtype, &cmdnum, &tickcount, &seed, mouse[2])
+public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3], float angles[3], int &weapon, int &subtype, int &cmdnum, int &tickcount, int &seed, int mouse[2])
 {
 	if (!g_bEnableHnS)
 		return Plugin_Continue;
@@ -677,7 +676,7 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
 }
 
 // SDKHook Callbacks
-public Action OnWeaponCanUse(client, weapon)
+public Action OnWeaponCanUse(int client, int weapon)
 {
 	// Allow only CTs to use a weapon
 	if(g_bEnableHnS && IsClientInGame(client) && GetClientTeam(client) != CS_TEAM_CT)
@@ -689,7 +688,7 @@ public Action OnWeaponCanUse(client, weapon)
 
 // Used to block blood
 // set a normal model right before death to avoid errors
-public Action OnTraceAttack(victim, &attacker, &inflictor, &Float:damage, &damagetype, &ammotype, hitbox, hitgroup)
+public Action OnTraceAttack(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &ammotype, int hitbox, int hitgroup)
 {
 	if (!g_bEnableHnS)
 		return Plugin_Continue;
@@ -739,7 +738,7 @@ public Action OnTraceAttack(victim, &attacker, &inflictor, &Float:damage, &damag
 	return Plugin_Continue;
 }
 
-public Hook_OnPostThinkPost(client)
+public Hook_OnPostThinkPost(int client)
 {
 	if (GetConVarBool(g_cvHidePlayerLocation))
 		SetEntPropString(client, Prop_Send, "m_szLastPlaceName", "");
@@ -802,6 +801,9 @@ public Action Event_OnPlayerSpawn(Handle event, const char[] name, bool dontBroa
 		
 		else
 		{
+			char ClientLangId[4];
+			GetClientLanguageID(client, ClientLangId, sizeof(ClientLangId));
+
 			// only disable the menu, if it's not unlimited
 			if (changeLimitTime > 0.0)
 				g_hAllowModelChangeTimer[client] = CreateTimer(changeLimitTime, DisableModelMenu, client);
@@ -814,10 +816,10 @@ public Action Event_OnPlayerSpawn(Handle event, const char[] name, bool dontBroa
 				SetRandomModel(client);
 			
 			else if (changeLimitTime > 0.0)
-				DisplayMenu(g_hModelMenu[GetClientLanguageID(client)], client, RoundToFloor(changeLimitTime));
+				DisplayMenu(g_hModelMenu[StringToInt(ClientLangId)], client, RoundToFloor(changeLimitTime));
 			
 			else
-				DisplayMenu(g_hModelMenu[GetClientLanguageID(client)], client, MENU_TIME_FOREVER);
+				DisplayMenu(g_hModelMenu[StringToInt(ClientLangId)], client, MENU_TIME_FOREVER);
 		}
 
 		g_iWhistleCount[client] = 0;
@@ -1580,7 +1582,7 @@ public Action Timer_AutoWhistle(Handle time, any user)
 	float User_Position[3];
 	GetClientAbsOrigin(user, User_Position);
 	User_Position[2] += 8.0;
-	EmitAmbientSound(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], User_Position, SOUND_FROM_WORLD, SNDLEVEL_AIRCRAFT, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, 0.0);
+	EmitAmbientSound(WhistleSoundPath[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], User_Position, SOUND_FROM_WORLD, SNDLEVEL_AIRCRAFT, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, 0.0);
 	PrintToChatAll("%s%t", PREFIX, "autowhistle");
 
 	g_hWhistleAuto = CreateTimer(GetConVarFloat(g_cvWhistleAutoTimer), Timer_AutoWhistle, user, TIMER_FLAG_NO_MAPCHANGE);
@@ -1642,8 +1644,8 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 		}
 	}
 
-	float fRatio = FloatDiv(float(iCTCount), float(iTCount));
-	float fCFGRatio = FloatDiv(1.0, GetConVarFloat(g_cvCTRatio));
+	float fRatio = float(iCTCount) / float(iTCount);
+	float fCFGRatio = 1.0 / GetConVarFloat(g_cvCTRatio);
 	char sName[64];
 	
 	// There are more CTs than we want in the CT team and it's not the first CT
@@ -1664,7 +1666,7 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 					PrintToChatAll("%s%t.", PREFIX, "stop switch", sName);
 
 					// switched enough players?
-					if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
+					if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || float(iCTCount) / float(iTCount) <= fCFGRatio)
 					{
 						return Plugin_Stop;
 					}
@@ -1684,7 +1686,7 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 			PrintToChatAll("%s%t", PREFIX, "switched", sName);
 
 			// switched enough players?
-			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
+			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || float(iCTCount) / float(iTCount) <= fCFGRatio)
 			{
 				return Plugin_Stop;
 			}
@@ -1715,7 +1717,7 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 			}
 
 			// switched enough players?
-			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
+			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || float(iCTCount) / float(iTCount) <= fCFGRatio)
 			{
 				return Plugin_Stop;
 			}
@@ -1726,7 +1728,7 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 		for (int CountToBeSwitched2 = 1; CountToBeSwitched2 <= MaxClients; CountToBeSwitched2++)
 		{
 			// switched enough players?
-			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
+			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || float(iCTCount) / float(iTCount) <= fCFGRatio)
 			{
 				return Plugin_Stop;
 			}
@@ -1747,7 +1749,7 @@ public Action Timer_ChangeTeam(Handle timer, any client)
 		for (int CountToBeSwitched3 = 1; CountToBeSwitched3 <= MaxClients; CountToBeSwitched3++)
 		{
 			// switched enough players?
-			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || FloatDiv(float(iCTCount), float(iTCount)) <= fCFGRatio)
+			if (float(iTCount) < GetConVarFloat(g_cvCTRatio) || float(iCTCount) / float(iTCount) <= fCFGRatio)
 			{
 				return Plugin_Stop;
 			}
@@ -1827,9 +1829,12 @@ public Action Timer_SaveSpawnPosition(Handle timer, any userid)
 */
 
 // say /hide /hidemenu
-public Action Menu_SelectModel(client,args)
+public Action Menu_SelectModel(int client, int args)
 {
-	if (!g_bEnableHnS || g_hModelMenu[GetClientLanguageID(client)] == INVALID_HANDLE)
+	char ClientLangId[4];
+	GetClientLanguageID(client, ClientLangId, sizeof(ClientLangId));
+
+	if (!g_bEnableHnS || g_hModelMenu[StringToInt(ClientLangId)] == INVALID_HANDLE)
 	{
 		return Plugin_Handled;
 	}
@@ -1843,7 +1848,7 @@ public Action Menu_SelectModel(client,args)
 				SetRandomModel(client);
 			
 			else
-				DisplayMenu(g_hModelMenu[GetClientLanguageID(client)], client, RoundToFloor(GetConVarFloat(g_cvChangeLimittime)));
+				DisplayMenu(g_hModelMenu[StringToInt(ClientLangId)], client, RoundToFloor(GetConVarFloat(g_cvChangeLimittime)));
 		}
 
 		else
@@ -1859,7 +1864,7 @@ public Action Menu_SelectModel(client,args)
 }
 
 // say /tp /third /thirdperson
-public Action Toggle_ThirdPerson(client, args)
+public Action Toggle_ThirdPerson(int client, int args)
 {
 	if (!g_bEnableHnS || !IsClientInGame(client) || !IsPlayerAlive(client))
 		return Plugin_Handled;
@@ -1888,7 +1893,7 @@ public Action Toggle_ThirdPerson(client, args)
 }
 
 // say /+3rd
-public Action Enable_ThirdPerson(client, args)
+public Action Enable_ThirdPerson(int client, int args)
 {
 	if (!g_bEnableHnS || !IsClientInGame(client) || !IsPlayerAlive(client))
 		return Plugin_Handled;
@@ -1910,7 +1915,7 @@ public Action Enable_ThirdPerson(client, args)
 }
 
 // say /-3rd
-public Action Disable_ThirdPerson(client, args)
+public Action Disable_ThirdPerson(int client, int args)
 {
 	if (!g_bEnableHnS || !IsClientInGame(client) || !IsPlayerAlive(client))
 		return Plugin_Handled;
@@ -1934,7 +1939,7 @@ public Action Disable_ThirdPerson(client, args)
 
 // jointeam command
 // handle the team sizes
-public Action Command_JoinTeam(client, args)
+public Action Command_JoinTeam(int client, int args)
 {
 	if (!g_bEnableHnS || !client || !IsClientInGame(client) || GetConVarFloat(g_cvCTRatio) == 0.0)
 	{
@@ -1972,8 +1977,8 @@ public Action Command_JoinTeam(client, args)
 			}
 		}
 
-		float fRatio = FloatDiv(float(iCTCount), float(iTCount));
-		float fCFGRatio = FloatDiv(1.0, GetConVarFloat(g_cvCTRatio));
+		float fRatio = float(iCTCount) / float(iTCount);
+		float fCFGRatio = 1.0 / GetConVarFloat(g_cvCTRatio);
 
 		// There are more CTs than we want in the CT team.
 		if (iCTCount > 1 && fRatio > fCFGRatio)
@@ -1989,7 +1994,7 @@ public Action Command_JoinTeam(client, args)
 
 // say /whistle
 // plays a random sound loudly
-public Action Play_Whistle(client,args)
+public Action Play_Whistle(int client, int args)
 {
 	// check if whistling is enabled
 	if (!g_bEnableHnS || !GetConVarBool(g_cvWhistle) || !IsPlayerAlive(client))
@@ -2013,7 +2018,7 @@ public Action Play_Whistle(client,args)
 		float Client_Position[3];
 		GetClientAbsOrigin(client, Client_Position);
 		Client_Position[2] += 8.0;
-		EmitAmbientSound(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], Client_Position, SOUND_FROM_WORLD, SNDLEVEL_AIRCRAFT, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, 0.0);
+		EmitAmbientSound(WhistleSoundPath[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], Client_Position, SOUND_FROM_WORLD, SNDLEVEL_AIRCRAFT, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, 0.0);
 		PrintToChatAll("%s%N %t", PREFIX, client, "whistled");
 		g_iWhistleCount[client]++;
 		PrintToChat(client, "%s%t", PREFIX, "whistles left", (GetConVarInt(g_cvWhistleTimes)-g_iWhistleCount[client]));
@@ -2029,7 +2034,7 @@ public Action Play_Whistle(client,args)
 
 // say /whoami
 // displays the model name in chat again
-public Action Display_ModelName(client,args)
+public Action Display_ModelName(int client, int args)
 {
 	// only enable command, if player already chose a model
 	if (!g_bEnableHnS || !IsPlayerAlive(client) || g_iModelChangeCount[client] == 0)
@@ -2077,7 +2082,7 @@ public Action Display_ModelName(client,args)
 
 // say /hidehelp
 // Show the help menu
-public Action Display_Help(client,args)
+public Action Display_Help(int client, int args)
 {
 	if (!g_bEnableHnS)
 		return Plugin_Handled;
@@ -2112,7 +2117,7 @@ public Action Display_Help(client,args)
 
 // say /freeze
 // Freeze hiders in position
-public Action Freeze_Cmd(client,args)
+public Action Freeze_Cmd(int client, int args)
 {
 	if (!g_bEnableHnS || !GetConVarInt(g_cvHiderFreezeMode) || GetClientTeam(client) != CS_TEAM_T || !IsPlayerAlive(client))
 		return Plugin_Handled;
@@ -2170,7 +2175,7 @@ public Action Freeze_Cmd(client,args)
 	return Plugin_Handled;
 }
 
-public Action Block_Cmd(client,args)
+public Action Block_Cmd(int client,int args)
 {
 	// only block if anticheat is enabled
 	if (g_bEnableHnS && GetConVarBool(g_cvAntiCheat))
@@ -2183,7 +2188,7 @@ public Action Block_Cmd(client,args)
 // Admin Command
 // sm_hns_force_whistle
 // Forces a terrorist player to whistle
-public Action ForceWhistle(client, args)
+public Action ForceWhistle(int client, int args)
 {
 	if (!g_bEnableHnS || !GetConVarBool(g_cvWhistle))
 	{
@@ -2209,7 +2214,7 @@ public Action ForceWhistle(client, args)
 		float Target_Position[3];
 		GetClientEyePosition(target, Target_Position);
 		Target_Position[2] += 8.0;
-		EmitAmbientSound(whistle_sounds_path[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], Target_Position, SOUND_FROM_WORLD, SNDLEVEL_AIRCRAFT, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, 0.0);
+		EmitAmbientSound(WhistleSoundPath[GetRandomInt(0, WHISTLE_SOUNDS_MAX-1)], Target_Position, SOUND_FROM_WORLD, SNDLEVEL_AIRCRAFT, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, 0.0);
 		PrintToChatAll("%s%N %t", PREFIX, target, "whistled");
 	}
 
@@ -2221,7 +2226,7 @@ public Action ForceWhistle(client, args)
 	return Plugin_Handled;
 }
 
-public Action ReloadModels(client, args)
+public Action ReloadModels(int client, int args)
 {
 	if (!g_bEnableHnS)
 	{
@@ -2240,7 +2245,7 @@ public Action ReloadModels(client, args)
 	return Plugin_Handled;
 }
 
-public Action PrintHnsVersion(client, args)
+public Action PrintHnsVersion(int client, int args)
 {
 	if (!g_bEnableHnS)
 	{
@@ -2261,7 +2266,7 @@ public Action PrintHnsVersion(client, args)
 * Menu Handler
 *
 */
-public Menu_Group(Handle menu, MenuAction action, client, param2)
+public Menu_Group(Handle menu, MenuAction action, int client, int param2)
 {
 	// make sure again, the player is a Terrorist
 	if (client > 0 && IsClientInGame(client) && GetClientTeam(client) == CS_TEAM_T && g_bAllowModelChange[client])
@@ -2363,7 +2368,7 @@ public Menu_Group(Handle menu, MenuAction action, client, param2)
 }
 
 // Display the different help menus
-public Menu_Help(Handle menu, MenuAction action, param1, param2)
+public Menu_Help(Handle menu, MenuAction action, int param1, int param2)
 {
 	if (action == MenuAction_Select)
 	{
@@ -2455,7 +2460,7 @@ public Menu_Help(Handle menu, MenuAction action, param1, param2)
 	}
 }
 
-public Menu_Dummy(Handle menu, MenuAction action, param1, param2)
+public Menu_Dummy(Handle menu, MenuAction action, int param1, int param2)
 {
 	if (action == MenuAction_Cancel && param2 != MenuCancel_Exit)
 	{
@@ -2477,7 +2482,7 @@ public Menu_Dummy(Handle menu, MenuAction action, param1, param2)
 
 // read the hide_and_seek map config
 // add all models to the menus according to the language
-BuildMainMenu()
+public BuildMainMenu()
 {
 	g_iTotalModelsAvailable = 0;
 
@@ -2583,7 +2588,7 @@ BuildMainMenu()
 	}
 }
 
-GetLanguageID(const char[] langCode)
+public int GetLanguageID(const char[] langCode)
 {
 	for (int CountLangId = 0; CountLangId <MAX_LANGUAGES; CountLangId++)
 	{
@@ -2594,7 +2599,7 @@ GetLanguageID(const char[] langCode)
 	return -1;
 }
 
-GetClientLanguageID(client, char languageCode[]="", maxlen=0)
+public GetClientLanguageID(int client, char[] languageCode, int maxlen)
 {
 	char langCode[4];
 	GetLanguageInfo(GetClientLanguage(client), langCode, sizeof(langCode));
@@ -2645,7 +2650,7 @@ GetClientLanguageID(client, char languageCode[]="", maxlen=0)
 	return -1;
 }
 
-GetNextLangID()
+public GetNextLangID()
 {
 	for (int CountLangIdNext = 0; CountLangIdNext < MAX_LANGUAGES; CountLangIdNext++)
 	{
@@ -2658,7 +2663,7 @@ GetNextLangID()
 }
 
 // Check if a player has a bad convar value set
-bool IsConVarCheater(client)
+bool IsConVarCheater(int client)
 {
 	for (int CountIsCheater = 0; CountIsCheater < sizeof(cheat_commands); CountIsCheater++)
 	{
@@ -2671,7 +2676,7 @@ bool IsConVarCheater(client)
 	return false;
 }
 
-bool IsPlayerAFK(client)
+bool IsPlayerAFK(int client)
 {
 	float fOrigin[3];
 	GetClientAbsOrigin(client, fOrigin);
@@ -2693,7 +2698,7 @@ stock bool UTIL_VectorEqual(const float vec1[3], const float vec2[3], const floa
 }
 
 // Fade a players screen to black (amount=0) or removes the fade (amount=255)
-PerformBlind(client, amount)
+public PerformBlind(int client, int amount)
 {
 	int mode;
 	if(amount == 0)
@@ -2704,7 +2709,7 @@ PerformBlind(client, amount)
 }
 
 // set a random model to a client
-SetRandomModel(client)
+public SetRandomModel(int client)
 {
 	// give him a random one.
 	char ModelPath[80];
@@ -2798,7 +2803,7 @@ SetRandomModel(client)
 	}
 }
 
-bool SetThirdPersonView(client, bool third)
+bool SetThirdPersonView(int client, bool third)
 {
 	if (third && !g_bInThirdPersonView[client])
 	{
@@ -2823,7 +2828,7 @@ bool SetThirdPersonView(client, bool third)
 	return false;
 }
 
-stock StripPlayerWeapons(client)
+stock StripPlayerWeapons(int client)
 {
 	int iWeapon = -1;
 	for (int CountWeaponSlot = CS_SLOT_PRIMARY; CountWeaponSlot <= CS_SLOT_C4; CountWeaponSlot++)
@@ -3130,7 +3135,7 @@ public Cfg_OnChangeEnable(Handle convar, const char[] oldValue, const char[] new
 }
 
 // check the given cheat cvars on every client
-public ClientConVar(QueryCookie cookie, client, ConVarQueryResult result, const char[] cvarName, const char[] cvarValue)
+public ClientConVar(QueryCookie cookie, int client, ConVarQueryResult result, const char[] cvarName, const char[] cvarValue)
 {
 	if (!IsClientInGame(client))
 		return;
@@ -3187,7 +3192,7 @@ public LoadWhistleSet()
 
 public LoadWhistleSound(const char cvarWhistleSet[PLATFORM_MAX_PATH])
 {
-	char whistle_sounds_set[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
+	char WhistleSoundSet[WHISTLE_SOUNDS_MAX][PLATFORM_MAX_PATH];
 	char bufferString[PLATFORM_MAX_PATH];
 	Handle SoundSetsKV = CreateKeyValues("SetsList");
 	BuildPath(Path_SM,bufferString, PLATFORM_MAX_PATH, "configs/hide_and_seek/whistle/HnS_SetsList.cfg");
@@ -3202,9 +3207,9 @@ public LoadWhistleSound(const char cvarWhistleSet[PLATFORM_MAX_PATH])
 				for (int CountWhistleSound = 0; CountWhistleSound < WHISTLE_SOUNDS_MAX; CountWhistleSound++)
 				{
 					IntToString(CountWhistleSound, bufferString, PLATFORM_MAX_PATH);
-					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[CountWhistleSound], PLATFORM_MAX_PATH);
-					whistle_sounds_path[CountWhistleSound] = whistle_sounds_set[CountWhistleSound];
-					PrecacheSound(whistle_sounds_path[CountWhistleSound], true);
+					KvGetString(SoundSetsKV, bufferString, WhistleSoundSet[CountWhistleSound], PLATFORM_MAX_PATH);
+					WhistleSoundPath[CountWhistleSound] = WhistleSoundSet[CountWhistleSound];
+					PrecacheSound(WhistleSoundPath[CountWhistleSound], true);
 				}
 			}
 
@@ -3222,9 +3227,9 @@ public LoadWhistleSound(const char cvarWhistleSet[PLATFORM_MAX_PATH])
 				for (int CountWhistleSound = 0; CountWhistleSound < WHISTLE_SOUNDS_MAX; CountWhistleSound++)
 				{
 					IntToString(CountWhistleSound, bufferString, PLATFORM_MAX_PATH);
-					KvGetString(SoundSetsKV, bufferString, whistle_sounds_set[CountWhistleSound], PLATFORM_MAX_PATH);
+					KvGetString(SoundSetsKV, bufferString, WhistleSoundSet[CountWhistleSound], PLATFORM_MAX_PATH);
 
-					if (StrEqual(whistle_sounds_set[CountWhistleSound],""))
+					if (StrEqual(WhistleSoundSet[CountWhistleSound],""))
 					{
 						CloseHandle(SoundSetsKV);
 						SetFailState("configs/hide_and_seek/whistle/HnS_SetsList.cfg not correctly structured.");
@@ -3232,10 +3237,10 @@ public LoadWhistleSound(const char cvarWhistleSet[PLATFORM_MAX_PATH])
 
 					else
 					{
-						whistle_sounds_path[CountWhistleSound] = whistle_sounds_set[CountWhistleSound];
-						PrecacheSound(whistle_sounds_path[CountWhistleSound], true);
-						Format(whistle_sounds_set[CountWhistleSound], PLATFORM_MAX_PATH, "sound/%s", whistle_sounds_set[CountWhistleSound]);
-						AddFileToDownloadsTable(whistle_sounds_set[CountWhistleSound]);
+						WhistleSoundPath[CountWhistleSound] = WhistleSoundSet[CountWhistleSound];
+						PrecacheSound(WhistleSoundPath[CountWhistleSound], true);
+						Format(WhistleSoundSet[CountWhistleSound], PLATFORM_MAX_PATH, "sound/%s", WhistleSoundSet[CountWhistleSound]);
+						AddFileToDownloadsTable(WhistleSoundSet[CountWhistleSound]);
 					}
 				}
 			}
