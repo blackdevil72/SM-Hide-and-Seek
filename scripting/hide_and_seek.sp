@@ -9,7 +9,7 @@
 // Third party includes
 #include <smlib> // https://github.com/bcserv/smlib
 
-#define PLUGIN_VERSION "1.6.0 Dev"
+#define PLUGIN_VERSION "1.6.0 dev"
 
 // that's what GetLanguageCount() got me
 #define MAX_LANGUAGES 27
@@ -253,7 +253,7 @@ public OnPluginStart()
 	RegAdminCmd("sm_hns_plugin_version", PrintHnsVersion, ADMFLAG_CHAT, "Print Hide and Seek plugin version.");
 
 	// Loading translations
-	LoadTranslations("plugin.hide_and_seek");
+	LoadTranslations("hide_and_seek.phrases");
 	LoadTranslations("common.phrases"); // for FindTarget()
 
 	// set the default values for cvar checking
