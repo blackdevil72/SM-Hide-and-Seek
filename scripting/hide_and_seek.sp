@@ -9,7 +9,7 @@
 // Third party includes
 #include <smlib> // https://github.com/bcserv/smlib
 
-#define PLUGIN_VERSION "1.6.0 dev"
+#define PLUGIN_VERSION "1.6.0"
 
 // that's what GetLanguageCount() got me
 #define MAX_LANGUAGES 27
