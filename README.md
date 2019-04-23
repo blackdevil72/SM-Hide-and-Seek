@@ -1,7 +1,7 @@
 # [Cs:S] SM: Hide and Seek
 Source mod Hide and Seek for Counter Strike : Source
 
-![](https://img.shields.io/badge/Version-1.5.1.1-brightgreen.svg) ![](https://img.shields.io/badge/License-Beerware-blue.svg) ![](https://img.shields.io/github/issues/blackdevil72/SM-Hide-and-Seek.svg) ![](https://img.shields.io/maintenance/yes/2019.svg)
+![](https://img.shields.io/badge/Version-1.6.0-brightgreen.svg) ![](https://img.shields.io/badge/License-Beerware-blue.svg) ![](https://img.shields.io/github/issues/blackdevil72/SM-Hide-and-Seek.svg) ![](https://img.shields.io/maintenance/yes/2019.svg)
 
 What's this?
 --------------------------------
@@ -18,10 +18,8 @@ Requirements
 Download Link
 --------------------------------
     
-   Stable : [Version 1.5.1.1](https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek/releases/download/1.5.1.1/css_hns_1.5.1.1.zip)
+   Stable : [Version 1.6.0](https://github.com/blackdevil72/SM-Hide-and-Seek/releases/download/1.6.0/css_hide_and_seek_1.6.0.zip)
    
-   Dev Build : [Version 1.6.0 Dev 6](https://github.com/blackdevil72/-Cs-S-SM-Hide-and-Seek/releases/download/1.6.0_dev/css_hide_and_seek_1.6.0_dev6.zip) (please read release note for more information)
-
 Player Commands
 --------------------------------
 
@@ -44,6 +42,15 @@ Plugin Cvars
     sm_hns_changelimittime - How long should a T be allowed to change his model again after spawn? (Default: 30.0)
     sm_hns_autochoose - Should the plugin choose models for the hiders automatically? (Default: 0)
     sm_hns_whistle - Are terrorists allowed to whistle? (Default: 1)
+    sm_hns_whistle_set - Wich whistle set to use. (Default: 0)
+    	0. Default
+    	1. Whistle
+    	2. Birds
+    	3. Custom
+	sm_hns_whistle_auto - Makes Terrorists automaticly whistle on a set timer. (Default: 0)
+		0. Disabled
+		1. Enabled)
+	sm_hns_whistle_auto_timer - How often the Auto-Whistle setting will trigger, in seconds. (Default: 0)
     sm_hns_whistle_times - How many times a hider is allowed to whistle per round? (Default: 5)
     sm_hns_hider_win_frags - How many frags should surviving hiders gain? (Default: 5)
     sm_hns_hp_seeker_enable - Should CT lose HP when shooting, 0 = off/1 = on. (Default 1)
@@ -53,8 +60,10 @@ Plugin Cvars
     sm_hns_opacity_enable - Should T get more invisible on low hp, 0 = off/1 = on. (Default 0)
     sm_hns_hidersspeed - Hiders speed (Default: 1.00)
     sm_hns_disable_rightknife - Disable rightclick for CTs with knife? Prevents knifing without losing heatlh. (Default: 1)
-    sm_hns_disable_ducking - Disable ducking. (Default: 0)
-    sm_hns_auto_thirdperson - Enable thirdperson view for hiders automatically (Default: 1)
+    sm_hns_disable_ducking - Disable ducking. (Default: 1)
+    	0. Every one can duck
+    	1. No one can duck
+    	2. Only CTs can duck    sm_hns_auto_thirdperson - Enable thirdperson view for hiders automatically (Default: 1)
     sm_hns_slay_seekers - Slay seekers on round end, if there are still hiders alive? (Default: 0)
     sm_hns_hider_freeze_mode - What to do with the /freeze command? (Default: 2)
         0: Disables /freeze command for hiders
@@ -99,6 +108,7 @@ It's recommend to set mp_forcecamera to 1 in your server.cfg!
 Admin commands
 --------------------------------
 
+	sm_hns_print_version - Print Hide and Seek plugin version.
     sm_hns_force_whistle <#userid|steamid|name> - Force a player to whistle disregarding his whistle limit. (chat flag)
     sm_hns_reload_models - Reload the modellist from the map config file. (rcon flag)
 
@@ -109,7 +119,7 @@ By default the plugin currently comes with a choice of models for all default ma
 
 Just create a new textfile in the /configs/hide_and_seek/maps folder named the same as the map you want to support. Check the existing files for the format - you're allowed to add as many models and languages as you want. Make sure to set the file encoding to UTF-8 without BOM (more info).
 
-I'd always appreciate it if you would share your model configs so they get added to the package by default.
+* I'd always appreciate it if you would share your model configs so they get added to the package by default.
 
 There are some special keys to set:
 
@@ -118,8 +128,6 @@ There are some special keys to set:
     "tax" "[money]" (e.g. "tax" "600")
         You're able to put taxes on some models to prevent everyone from using it every round. Useful for small models.
         Since Hiders don't get that much money during gameplay, don't set the tax too high. (If you've got some ideas for events to give hiders money for, let me know!)
-
-Don't hesitate to send me your map configuration!
 
 Original Source Code
 --------------------------------
