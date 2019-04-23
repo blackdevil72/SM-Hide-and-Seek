@@ -47,10 +47,10 @@ Plugin Cvars
     	1. Whistle
     	2. Birds
     	3. Custom
-	sm_hns_whistle_auto - Makes Terrorists automaticly whistle on a set timer. (Default: 0)
+    sm_hns_whistle_auto - Makes Terrorists automaticly whistle on a set timer. (Default: 0)
 		0. Disabled
-		1. Enabled)
-	sm_hns_whistle_auto_timer - How often the Auto-Whistle setting will trigger, in seconds. (Default: 0)
+		1. Enabled
+    sm_hns_whistle_auto_timer - How often the Auto-Whistle setting will trigger, in seconds. (Default: 0)
     sm_hns_whistle_times - How many times a hider is allowed to whistle per round? (Default: 5)
     sm_hns_hider_win_frags - How many frags should surviving hiders gain? (Default: 5)
     sm_hns_hp_seeker_enable - Should CT lose HP when shooting, 0 = off/1 = on. (Default 1)
@@ -63,7 +63,8 @@ Plugin Cvars
     sm_hns_disable_ducking - Disable ducking. (Default: 1)
     	0. Every one can duck
     	1. No one can duck
-    	2. Only CTs can duck    sm_hns_auto_thirdperson - Enable thirdperson view for hiders automatically (Default: 1)
+    	2. Only CTs can duck
+    sm_hns_auto_thirdperson - Enable thirdperson view for hiders automatically (Default: 1)
     sm_hns_slay_seekers - Slay seekers on round end, if there are still hiders alive? (Default: 0)
     sm_hns_hider_freeze_mode - What to do with the /freeze command? (Default: 2)
         0: Disables /freeze command for hiders
