@@ -1,6 +1,7 @@
 # [Cs:S] SM: Hide and Seek
 Source mod Hide and Seek for Counter Strike : Source
 
+![](https://img.shields.io/badge/Version-1.5.1.1-brightgreen.svg) ![](https://img.shields.io/badge/License-Beerware-blue.svg) ![](https://img.shields.io/github/issues/blackdevil72/SM-Hide-and-Seek.svg) ![](https://img.shields.io/maintenance/yes/2019.svg)
 
 What's this?
 --------------------------------
@@ -11,7 +12,8 @@ Seekers either lose some health (default 5 hp) on every shot or hiders get more 
 Requirements
 --------------------------------
 
-   [SourceMod latest stable release](https://www.sourcemod.net/)
+   * [SourceMod latest stable release](https://www.sourcemod.net/)
+   * [SMLib latest release (if you need to compile yourself)](https://github.com/bcserv/smlib)
     
 Download Link
 --------------------------------
@@ -106,6 +108,7 @@ Adding new maps
 By default the plugin currently comes with a choice of models for all default maps for CS:S, but it's really easy to add support for any other map. You should only use maps with lot's of props, so hiders aren't that obvious to find.
 
 Just create a new textfile in the /configs/hide_and_seek/maps folder named the same as the map you want to support. Check the existing files for the format - you're allowed to add as many models and languages as you want. Make sure to set the file encoding to UTF-8 without BOM (more info).
+
 I'd always appreciate it if you would share your model configs so they get added to the package by default.
 
 There are some special keys to set:
