@@ -13,6 +13,7 @@ Requirements
 --------------------------------
 
    [SourceMod latest stable release](https://www.sourcemod.net/)
+   [SMLib latest release (if you need to compile yourself)](https://github.com/bcserv/smlib)
     
 Download Link
 --------------------------------
@@ -107,6 +108,7 @@ Adding new maps
 By default the plugin currently comes with a choice of models for all default maps for CS:S, but it's really easy to add support for any other map. You should only use maps with lot's of props, so hiders aren't that obvious to find.
 
 Just create a new textfile in the /configs/hide_and_seek/maps folder named the same as the map you want to support. Check the existing files for the format - you're allowed to add as many models and languages as you want. Make sure to set the file encoding to UTF-8 without BOM (more info).
+
 I'd always appreciate it if you would share your model configs so they get added to the package by default.
 
 There are some special keys to set:
