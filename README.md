@@ -1,6 +1,7 @@
 # [Cs:S] SM: Hide and Seek
 Source mod Hide and Seek for Counter Strike : Source
 
+![](https://img.shields.io/badge/Version-1.5.1.1-brightgreen.svg) ![](https://img.shields.io/badge/License-Beerware-blue.svg) ![](https://img.shields.io/github/issues/blackdevil72/SM-Hide-and-Seek.svg) ![](https://img.shields.io/maintenance/yes/2019.svg)
 
 What's this?
 --------------------------------
