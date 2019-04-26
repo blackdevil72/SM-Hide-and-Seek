@@ -9,7 +9,7 @@
 // Third party includes
 #include <smlib> // https://github.com/bcserv/smlib
 
-#define PLUGIN_VERSION "1.6.0"
+#define PLUGIN_VERSION "1.6.1"
 
 // that's what GetLanguageCount() got me
 #define MAX_LANGUAGES 27
@@ -911,11 +911,11 @@ public Action Event_OnPlayerSpawn(Handle event, const char[] name, bool dontBroa
 			// Start freezing player
 			g_hFreezeCTTimer[client] = CreateTimer(2.0, FreezePlayer, client, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
 
-			if(g_hUnfreezeCTTimer[client] != INVALID_HANDLE)
-			{
-				KillTimer(g_hUnfreezeCTTimer[client]);
-				g_hUnfreezeCTTimer[client] = INVALID_HANDLE;
-			}
+//			if(g_hUnfreezeCTTimer[client] != INVALID_HANDLE)
+//			{
+//				KillTimer(g_hUnfreezeCTTimer[client]);
+//				g_hUnfreezeCTTimer[client] = INVALID_HANDLE;
+//			}
 
 			// Stop freezing player
 			g_hUnfreezeCTTimer[client] = CreateTimer(freezeTime-float(currentTime - g_iFirstCTSpawn), UnFreezePlayer, client, TIMER_FLAG_NO_MAPCHANGE);
@@ -1059,6 +1059,14 @@ public Action Event_OnRoundEnd(Handle event, const char[] name, bool dontBroadca
 	{
 		KillTimer(g_hWhistleAuto);
 		g_hWhistleAuto = INVALID_HANDLE;
+	}
+
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
+
+	if(g_hUnfreezeCTTimer[client] != INVALID_HANDLE)
+	{
+		KillTimer(g_hUnfreezeCTTimer[client]);
+		g_hUnfreezeCTTimer[client] = INVALID_HANDLE;
 	}
 
 	int winnerTeam = GetEventInt(event, "winner");
