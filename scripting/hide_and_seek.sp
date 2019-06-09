@@ -180,9 +180,9 @@ public OnPluginStart()
 	g_cvChangeLimit = 			CreateConVar("sm_hns_changelimit", "2", "How often a T is allowed to choose his model ingame? 0 = unlimited", 0, true, 0.00);
 	g_cvChangeLimittime = 		CreateConVar("sm_hns_changelimittime", "30.0", "How long should a T be allowed to change his model again after spawn?", 0, true, 0.00);
 	g_cvAutoChoose = 			CreateConVar("sm_hns_autochoose", "0", "Should the plugin choose models for the hiders automatically?", 0, true, 0.0, true, 1.0);
-	g_cvWhistle = 				CreateConVar("sm_hns_whistle", "1", "Are terrorists allowed to whistle?", 0);
+	g_cvWhistle = 				CreateConVar("sm_hns_whistle", "1", "Are terrorists allowed to whistle?", _, true, 0.0, true, 1.0);
 	g_cvWhistleSet =			CreateConVar("sm_hns_whistle_set", "0", "Wich whistle set to use. 0 = Default / 1 = Whistle / 2 = Birds / 3 = Custom", 0, true, 0.0, true, 3.0);
-	g_cvWhistleTimes = 			CreateConVar("sm_hns_whistle_times", "5", "How many times a hider is allowed to whistle per round?", 0);
+	g_cvWhistleTimes = 			CreateConVar("sm_hns_whistle_times", "5", "How many times a hider is allowed to whistle per round?", _, true, 0.0, true, 100.0);
 	g_cvWhistleDelay =			CreateConVar("sm_hns_whistle_delay", "25.0", "How long after spawn should we delay the use of whistle?", 0, true, 0.00, true, 120.00);
 	g_cvWhistleAuto =			CreateConVar("sm_hns_whistle_auto", "0", "Makes Terrorists automaticly whistle on a set timer.", 0, true, 0.00, true, 1.00);
 	g_cvWhistleAutoTimer = 		CreateConVar("sm_hns_whistle_auto_timer", "120", "How often the Auto-Whistle setting will trigger (in seconds)", 0, true, 60.0, true, 300.0);
@@ -1280,7 +1280,7 @@ public Event_OnItemPickup(Handle event, const char[] name, bool dontBroadcast)
 	if (!g_bEnableHnS)
 		return;
 
-	int client = GetClientOfUserId(GetEventInt( event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	char sItem[100];
 	GetEventString(event, "item", sItem, sizeof(sItem));
 
@@ -1992,7 +1992,7 @@ public Action Command_JoinTeam(int client, int args)
 		if (iCTCount > 1 && fRatio > fCFGRatio)
 		{
 			EmitSoundToClient(client, "buttons/weapon_cant_buy.wav");
-			PrintHintText(client, "%t", "CT team is fulll");
+			PrintHintText(client, "%t", "CT team is full");
 			return Plugin_Handled;
 		}
 	}
